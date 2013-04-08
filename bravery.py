@@ -86,7 +86,7 @@ def everyThread(comment, body):
 # Replies with either a picture of Colby Jack cheese, a dog with Mitt Romney, or a copypasta.
 # This rule brought to you by: /u/garrison0
 def leColby(comment, body):
-	lowercaseComment = body.lower
+	lowercaseComment = body.lower()
 	if "COLBY" in body or "Colby" in body or "colby" in lowercaseComment:
 		potentialReplies = [
 			"http://i.imgur.com/yZbD4.jpg",
