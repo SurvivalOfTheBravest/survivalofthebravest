@@ -49,8 +49,12 @@ def murica(comment,body):
 
 
 # I think you can guess what this is supposed to do...
+# This rule brought to you by: /u/TheSox3
 def anneFrankly(comment,body):
-	return None #Somebody else write this. I'm too lazy.
+	lowercaseComment = body.lower()
+	if "anne frankly i did not see that coming" in lowercaseComment
+		return("shut the fuck up you unoriginal faggot",comment)
+	return None
 
 
 
