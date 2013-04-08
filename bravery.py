@@ -70,10 +70,10 @@ def noWords(comment,body):
 	lowercaseComment = body.lower()
 	if "i have no words" in lowercaseComment:
 		wordCount = len(body.split(" "))#make some shit that counts how many words, named wordCount here
-		return("\"I have no words\"? Sounds like you have at least "+ wordCount + " words.",comment)
+		return("\"I have no words\"? Sounds like you have at least "+ str(wordCount) + " words.",comment)
 	return None
-	
-	
+
+
 # WOW, MOTHERFUCKING AND INCEST, DAE?
 # This rule brought to you by: /u/garrison0
 def everyThread(comment, body):
@@ -81,7 +81,7 @@ def everyThread(comment, body):
 	if "broken arms" in lowercaseComment or "arms broken" in lowercaseComment:
 		return("WOW EVERY THREAD! /r/incest is THAT way xDDD!!", comment)
 	return None
-	
+
 # WOW, BEASTIALITY TOO? DAE?
 # Replies with either a picture of Colby Jack cheese, a dog with Mitt Romney, or a copypasta.
 # This rule brought to you by: /u/garrison0
@@ -94,51 +94,51 @@ def leColby(comment, body):
 			""" I truly believe I am the most horny person a live. I have done many sexual things
 			in the past, have fantasies about, and dream about.*
 			Where do I begin?
-			When I was 4 years old I would sleep in the same room as my grandma. i would crawl 
-			up to her bed and lick and smell her feet. it would take a while for her to wake up, 
+			When I was 4 years old I would sleep in the same room as my grandma. i would crawl
+			up to her bed and lick and smell her feet. it would take a while for her to wake up,
 			and she would tell me to stop and i would just trollface. i licked her feet it tasted
 			like a dampy salt flavour, and she had some calluses and thick feet skin. i guess this
 			is how my feet fetish began...
-			when i was 4 or 5 years old, i would begin masterbating. i masterbated in the way where 
+			when i was 4 or 5 years old, i would begin masterbating. i masterbated in the way where
 			you lie face down stomach down on the ground and cup your hands around your genitals and
 			rub up your crotch against the ground.*
 			so around 4 or 5 im watching jurassic park. the scene of the 2 raptors chasing the 2 kids,
 			(1 girl) in the kitchen. i imagined the raptor raping the girl. i guess this is how my
 			beastiality fetish began...
 			whenever women walk by , i breathe in her to smell her scent.
-			in the rare chase i am talking to a woman face to face, when she is speaking i like to 
+			in the rare chase i am talking to a woman face to face, when she is speaking i like to
 			breathe in really hard to smell her breathe and remember it.
 			i fantasize about an alien world where there is only ONE female and she is like the Queen.
-			the thing is though, she is a sex queen and gets dped and throat fcked 24/7 forever. she 
+			the thing is though, she is a sex queen and gets dped and throat fcked 24/7 forever. she
 			does not die and she is too well protected in their core of their world.*
-			i fantasize about being a girl and just being a sex slave for the pleasure of all men. 
-			some example stories are cynthia palmers new life by redlegtiger which you can find on 
-			bdsmlibrary. it tells of cynthia palamer, a hot young innnocent girl turned sex slave 
+			i fantasize about being a girl and just being a sex slave for the pleasure of all men.
+			some example stories are cynthia palmers new life by redlegtiger which you can find on
+			bdsmlibrary. it tells of cynthia palamer, a hot young innnocent girl turned sex slave
 			for anyone and animals. stories tell of her eating our dirty mare ****s, animal gangbangs,
 			drinking piss from any animal, or human.
 			i fantasize about a hot girl getting abducted by a gang of giant big black silverback
-			gorillas and she gets gangbanged in every way possible. dp, doublevag/doubleanal, deepthroat 
-			etc. and i imagine the apes kept her as their sex slave and she would give birth since apes 
+			gorillas and she gets gangbanged in every way possible. dp, doublevag/doubleanal, deepthroat
+			etc. and i imagine the apes kept her as their sex slave and she would give birth since apes
 			and human dna are similar and she gives birth to the planet of the apes.
-			when i was 11 or 12, when i first hit puberty, i would get so horny i would masterbate 10+ 
-			times a day using my stomach down rub groin method. i would also begin to try to drink pee 
-			pretending i am psychologically a woman. i am sad to say, however, i have not been able to 
+			when i was 11 or 12, when i first hit puberty, i would get so horny i would masterbate 10+
+			times a day using my stomach down rub groin method. i would also begin to try to drink pee
+			pretending i am psychologically a woman. i am sad to say, however, i have not been able to
 			swallow. i would be in the shower and i would cup my hand around my dick and pee in it and
-			i would slurp it up and hold it in my mouth for around 15 secs savioring the taste. i would 
-			try to swallow and fail and either throw up and or gag. i would also get into the position 
+			i would slurp it up and hold it in my mouth for around 15 secs savioring the taste. i would
+			try to swallow and fail and either throw up and or gag. i would also get into the position
 			where i have my back and legs up against a wall and i would pee on my own face imagining myself
 			as a hot young skanky bitch whore. one time piss got in 1 of my eyes it stung like hell lmao.
-			in the cartoon movie osmosis jones, the scene where the guy talks to the hot female teacher 
-			the guys pimple burst. i fantasized about the hot teacher licking the burst pimple and licking 
+			in the cartoon movie osmosis jones, the scene where the guy talks to the hot female teacher
+			the guys pimple burst. i fantasized about the hot teacher licking the burst pimple and licking
 			up all the puss and swallowing it before fcking bill murray.
-			i sometimes fantasize about suddenly becoming a woman. as you know, technology is just 
+			i sometimes fantasize about suddenly becoming a woman. as you know, technology is just
 			getting more advanced year by year. very soon they will have a drug that will allow us to
 			change genders. i would take this and become a 10/10 dirty blonde eye shadowed g string w
-			earing slut. i would fantasize about doing this and becoming a sex slave in a giant 
+			earing slut. i would fantasize about doing this and becoming a sex slave in a giant
 			organization and i would get fcked and abused everything.
-			however this is just a fantasy as of now as the thought of it scares me. i am not in 
+			however this is just a fantasy as of now as the thought of it scares me. i am not in
 			disagreemnt though.
-			i have so many more dark fantasies and things ive done ill post some later on. in the 
+			i have so many more dark fantasies and things ive done ill post some later on. in the
 			mean time, comment and ask questions. i am an aspiring writer in the topic of black sexology.""",
 		]
 		return(random.choice(potentialReplies), comment)
