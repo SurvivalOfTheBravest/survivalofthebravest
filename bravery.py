@@ -145,7 +145,7 @@ def leColby(comment, body):
 		return(random.choice(potentialReplies), comment)
 	return None
 
-
+# This rule brought to you by: /u/flesjewater
 def navySealPasta(comment,body):
 	lowercaseComment = body.lower()
 	if "faggot" in lowercaseComment and "fuck you" in lowercaseComment:
