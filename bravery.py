@@ -157,7 +157,7 @@ listOfRules = {
 	murica:"murica",
 	anneFrankly:"anneFrankly",
 	atheismIsShit:"atheismIsShit",
-	noWords:"noWords"
+	noWords:"noWords",
 	everyThread:"everyThread",
 	leColby:"leColby",
 }
