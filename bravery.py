@@ -14,7 +14,7 @@ import random
 # but doesn't mention r/onetruegod.
 # This rule brought to you by: /u/SurvivalOfTheBravest
 def oneTrueGod(comment,body):
-  lowercaseComment = body.lower()
+	lowercaseComment = body.lower()
 	if "nicolas cage" in lowercaseComment or "nick cage" in lowercaseComment:
 		if "r/onetruegod" not in lowercaseComment:
 			return ("/r/onetruegod", comment)
