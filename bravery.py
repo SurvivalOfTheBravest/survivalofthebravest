@@ -57,6 +57,23 @@ def anneFrankly(comment,body):
 	return None
 
 
+# This rule brought to you by: /u/RollCakeTroll
+def atheismIsShit(comment,body):
+	lowercaseComment = body.lower()
+	if "this is why /r/atheism is shit" in lowercaseComment:
+		return("Ctrl-F \"this is why /r/atheism is shit\", was not dissapointed",comment)
+	return None
+
+
+# This rule brought to you by: /u/RollCakeTroll
+def noWords(comment,body):
+	lowercaseComment = body.lower()
+	if "i have no words" in lowercaseComment:
+		wordCount = len(body.split(" "))#make some shit that counts how many words, named wordCount here
+		return("\"I have no words\"? Sounds like you have at least "+ wordCount + " words.",comment)
+	return None
+
+
 
 # END BRAVERY RULES
 
@@ -72,6 +89,8 @@ listOfRules = {
 	sarahJessicaParker:"sarahJessicaParker",
 	murica:"murica",
 	anneFrankly:"anneFrankly",
+	atheismIsShit:"atheismIsShit",
+	noWords:"noWords"
 }
 
 trackingSubreddits = [
