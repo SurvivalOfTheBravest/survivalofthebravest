@@ -159,7 +159,7 @@ def fuckYouOrFagResp(comment,body):
 	lowercaseComment = body.lower() 
 	if ("faggot" in lowercaseComment) ^ ("fuck you" in lowercaseComment):
 		offendedResponse = ['You, sir, are a gentleman and a scholar!', 'So brave.', 'XD', "At least I'm not a nigger."]
-		return(choice(offendedResponse),comment) 
+		return(random.choice(offendedResponse),comment) 
 	return None
 
 # END BRAVERY RULES
