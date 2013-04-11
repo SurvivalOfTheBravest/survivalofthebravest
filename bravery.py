@@ -70,7 +70,7 @@ import re
 def noWords(comment,body):
 	lowercaseComment = body.lower()
 	if "i have no words" in lowercaseComment:
-		wordCount = len(re.findall(r'\w+', body))#make some shit that counts how many words, named wordCount here
+		wordCount = len(re.findall(ur"[\w'’\-]+", body)) #make some shit that counts how many words, named wordCount here #regex by /u/FrenchfagsCantQueue
 		return("\"I have no words\"? Sounds like you have at least "+ str(wordCount) + " words.",comment)
 	return None
 
@@ -253,6 +253,7 @@ def hello_timmie(comment, body):
 	return None
 
 
+# This rule brought to you by: /u/bakedpatato
 def EAIsHitler(comment,body):
 	lc = body.lower()
 	if re.search(r'\bea\b', lc) and ("hate" in lc or "never" in lc or "worst company" in lc): # I can't think of any substrings of "hate or "never" so it should be ok. The first statement is a regex looking for space"ea"space in lc
