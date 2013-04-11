@@ -410,6 +410,7 @@ def implementRule(ruleFunction):
 					if "you are doing that too much. try again in" in str(ex):
 						delayedComments.append((reply, ruleFunction))
 						print "Comment has been delayed. We'll try again later."
+						break
 					else:
 						print "Something went wrong! Try again 22 times.", ex
 					time.sleep(30)
