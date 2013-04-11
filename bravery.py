@@ -253,6 +253,13 @@ def hello_timmie(comment, body):
 	return None
 
 
+def EAIsHitler(comment,body):
+	lc = body.lower()
+	if "EA" in body and ("hate" in lc or "never" in lc or "worst company" in lc): #not exhaustive list, too lazy for regex
+		return("EA is hit[le]r, amirite?",comment)
+	return None
+
+
 # END BRAVERY RULES
 
 
@@ -273,6 +280,7 @@ listOfRules = {
 	omgWhoTheHellCares:"omgWhoTheHellCares",
 	thats_racist:"thats_racist",
 	hello_timmie:"hello_timmie",
+	EAIsHitler:"EAIsHitler",
 }
 
 # Every rule listed here will be applied only to comments in the subreddits
@@ -370,8 +378,18 @@ def dumpMemory():
 	file.close()
 	print "Memory successfully dumped."
 
-import string
-multiReddit = string.join(trackingSubreddits, "+")
+
+delayedComments = []
+
+
+def makeComment(reply, ruleFunction):
+	if type(reply[1]).__name__ == "Submission":
+		myReply = reply[1].add_comment(reply[0])
+	else:
+		myReply = reply[1].reply(reply[0]) #DAE reply?
+	threadsWeveRepliedTo[listOfRules[ruleFunction]].append(myReply.submission.id)
+	repliesWeveMade[listOfRules[ruleFunction]].append(myReply.id)
+	print "Successfully commented!", myReply.permalink
 
 
 
@@ -386,16 +404,14 @@ def implementRule(ruleFunction):
 		else:
 			for i in range(22):
 				try:
-					if type(reply[1]).__name__ == "Submission":
-						myReply = reply[1].add_comment(reply[0])
-					else:
-						myReply = reply[1].reply(reply[0]) #DAE reply?
-					threadsWeveRepliedTo[listOfRules[ruleFunction]].append(myReply.submission.id)
-					repliesWeveMade[listOfRules[ruleFunction]].append(myReply.id)
-					print "Successfully commented!", myReply.permalink
+					makeComment(reply, ruleFunction)
 					break
 				except Exception, ex:
-					print "Something went wrong! Try again 22 times.", ex
+					if "you are doing that too much. try again in" in str(ex):
+						delayedComments.append((reply, ruleFunction))
+						print "Comment has been delayed. We'll try again later."
+					else:
+						print "Something went wrong! Try again 22 times.", ex
 					time.sleep(30)
 	return implementation
 
@@ -406,12 +422,13 @@ def implementRule(ruleFunction):
 user_agent = "Bravery bot 1.0 by /u/SurvivalOfTheBravest"
 r = praw.Reddit(user_agent=user_agent)
 r.login(username="SurvivalOfTheBravest", password="")
-subreddits = r.get_subreddit(multiReddit)
+
 
 implementedRules = [(rule,implementRule(rule)) for rule in listOfRules]
 startTime = time.time()
 while True:
 	print "Start loop."
+	delayedComments = []
 	for sr in trackingSubreddits:
 		try:
 			print "Checking subreddit:", sr
@@ -438,8 +455,22 @@ while True:
 
 		dumpMemory()
 
-	print "Done with every subreddit. Sleeping..."
-	time.sleep(61)
+	print "Done with every subreddit."
+
+	if delayedComments:
+		print "We will now attempt to make the delayed comments."
+		for (reply, ruleFunction) in delayedComments:
+			for i in range(22):
+				try:
+					makeComment(reply, ruleFunction)
+					break
+				except Exception, ex:
+					print "Something went wrong! Try again 22 times.", ex
+					time.sleep(30)
+		print "Finished with delayed comments."
+	else:
+		print "No delayed comments, so we'll sleep."
+		time.sleep(72)
 	currentTime = time.time()
 	if currentTime - startTime > 85500:
 		print "Timed out after 23:45."
