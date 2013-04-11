@@ -380,7 +380,7 @@ def dumpMemory():
 
 
 delayedComments = []
-
+nextDelayedComments = []
 
 def makeComment(reply, ruleFunction):
 	if type(reply[1]).__name__ == "Submission":
@@ -399,21 +399,23 @@ def implementRule(ruleFunction):
 		reply = ruleFunction(comment,body)
 		if not reply:
 			pass # No rules apply.
-		elif comment.submission.id in threadsWeveRepliedTo[listOfRules[ruleFunction]]:
-			print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
 		else:
-			for i in range(22):
-				try:
-					makeComment(reply, ruleFunction)
-					break
-				except Exception, ex:
-					if "you are doing that too much. try again in" in str(ex):
-						delayedComments.append((reply, ruleFunction))
-						print "Comment has been delayed. We'll try again later."
+			threadID = comment.submission.id
+			if threadID in threadsWeveRepliedTo[listOfRules[ruleFunction]]:
+				print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
+			else:
+				for i in range(22):
+					try:
+						makeComment(reply, ruleFunction)
 						break
-					else:
-						print "Something went wrong! Try again 22 times.", ex
-					time.sleep(30)
+					except Exception, ex:
+						if "you are doing that too much. try again in" in str(ex):
+							delayedComments.append((reply, ruleFunction, threadID))
+							print "Comment has been delayed. We'll try again later."
+							break
+						else:
+							print "Something went wrong! Try again 22 times.", ex
+						time.sleep(30)
 	return implementation
 
 
@@ -429,7 +431,8 @@ implementedRules = [(rule,implementRule(rule)) for rule in listOfRules]
 startTime = time.time()
 while True:
 	print "Start loop."
-	delayedComments = []
+	delayedComments = nextDelayedComments
+	nextDelayedComments = []
 	for sr in trackingSubreddits:
 		try:
 			print "Checking subreddit:", sr
@@ -459,15 +462,24 @@ while True:
 	print "Done with every subreddit."
 
 	if delayedComments:
-		print "We will now attempt to make the delayed comments."
-		for (reply, ruleFunction) in delayedComments:
-			for i in range(22):
-				try:
-					makeComment(reply, ruleFunction)
-					break
-				except Exception, ex:
-					print "Something went wrong! Try again 22 times.", ex
-					time.sleep(30)
+		print "We will now attempt to make the", len(delayedComments), "delayed comments."
+		for (reply, ruleFunction, threadID) in delayedComments:
+			if threadID in threadsWeveRepliedTo[listOfRules[ruleFunction]]:
+				print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
+			else:
+				for i in range(5):
+					try:
+						makeComment(reply, ruleFunction)
+						break
+					except Exception, ex:
+						if i==4 and "you are doing that too much. try again in" in str(ex):
+							nextDelayedComments.append((reply, ruleFunction, threadID))
+							print "We still couldn't post the comment. Deferred to the next round."
+							break
+						else:
+							print "Something went wrong! Try again 5 times.", ex
+						time.sleep(30)
+		dumpMemory()
 		print "Finished with delayed comments."
 	else:
 		print "No delayed comments, so we'll sleep."
