@@ -155,20 +155,101 @@ def navySealPasta(comment,body):
 
 
 # This rule brought to you by: /u/AerateMark
-def fuckYouOrFagResp(comment,body): 
-	lowercaseComment = body.lower() 
+def fuckYouOrFagResp(comment,body):
+	lowercaseComment = body.lower()
 	if ("faggot" in lowercaseComment) ^ ("fuck you" in lowercaseComment):
 		offendedResponse = ['You, sir, are a gentleman and a scholar!', 'So brave.', 'XD', "At least I'm not a nigger."]
-		return(random.choice(offendedResponse),comment) 
+		return(random.choice(offendedResponse),comment)
 	return None
+
+
+# Here's some code to reply to people who are complaining about a post in /r/wtf
+# being in the wrong subreddit or to join in with them with your own top-level comment.
+# This rule brought to you by: /u/Carl_Bravery_Sagan
+def notWTF(comment,body):
+	#I don't know how to check the current subreddit so you'll have to do this.
+	#pseudocode is below
+	#if comment not in /r/wtf, return None
+
+	#Also, don't reply to yourself
+	#if comment.author == "SurvivalOfTheBravest" return None
+
+	lowercaseComment = body.lower()
+	#Check if it contains any of the following:
+	triggercomments = [
+		"not wtf",
+		"isnt wtf",
+		"isn't wtf",
+		"im14andthisiswtf",
+		"mildlyinteresting",
+		"wtf material",
+		"wtf worthy",
+		"r/pics",
+		"r/funny",
+	]
+
+	for trigger in triggercomments:
+		if trigger in lowercaseComment:
+			#Now, choose whether to make a top level response or a reply
+			#chooser is either 1 or 2
+			chooser = random.randint(1,2)
+			if chooser == 1:
+				#If we hit a trigger, either respond to the comment...
+				responses = [
+					"This. So much this.",
+					"I'm really appalled by the state of this subreddit.",
+					"This",
+					"I wish I had more than one upRon to give to such a brave comment.",
+					"I couldn't agree more, brave sir",
+					#I need more comments. I can't think of anything else
+				]
+				return(random.choice(responses) , comment)
+			else:
+				#...or make a top level comment
+				topLevelResponses = [
+					"Quick! Are you on /r/funny, /r/pics, or /r/wtf?",
+					"/r/im14andthisisWTF",
+					"OP is a faggot. Post in a relevant sub.",
+					"I don't think this is really WTF-worthy",
+					#Again, I'm running out of comments
+				]
+				#Only do this if bravery bot hasn't made a top level comment yet. Also, I don't know how to return a top level comment
+				return(random.choice(topLevelResponses), comment.submission)
+
+	return None
+
+
+# Reply to /u/OMG_WhoTheHellCares ironically pointing out that it's talking to a bot.
+# But only do it half of the time, so it's not immediately obvious what's going on.
+# This rule brought to you by: /u/omgwthc
+def omgWhoTheHellCares(comment,body):
+    if random.randint(0,1) == 1:
+    	if body == "http://youtu.be/s0F3LKaGN2A" and str(comment.author) == "OMG_WhoTheHellCares":
+            responses = [
+                "You're talking to a bot.",
+                "Umm... you realize that's a bot, right?",
+                "Bots replying to bots? When will it end?",
+                "**B O T C E P T I O N**",
+                "Do you seriously have nothing better to do than to sit around all day replying to the SRD bot?"
+            ]
+            return(random.choice(responses), comment)
+    return None
+
+
+# This rule brought to you by: /u/FrenchfagsCantQueue
+def thats_racist(comment, body):  # srsly, CamelCase for python function names - are you even atheist bro??
+    if False and 'black' in body.lower() and len(body) < 200:
+        return "What the fuck bro?!, that's racist", comment
+    elif "i'm white" in body.lower() and len(body) < 200:  # am I allowed two things? - #YOLO #420-sagan-it
+        return ">I'm white\n\nCheck your privilege!!", comment
+    else:
+        return None
+
 
 # END BRAVERY RULES
 
-######################################################################
 
-
-
-# BEGIN DARK ATHEIST PYTHON MAGIC
+# BEGIN CONFIGURATION LISTS
 
 listOfRules = {
 	oneTrueGod:"oneTrueGod",
@@ -178,10 +259,21 @@ listOfRules = {
 	atheismIsShit:"atheismIsShit",
 	noWords:"noWords",
 	everyThread:"everyThread",
-	leColby:"leColby",
+	#leColby:"leColby",
 	navySealPasta:"navySealPasta",
-	fuckYouOrFagResp:"fuckYouOrFagResp"
+	#fuckYouOrFagResp:"fuckYouOrFagResp"
+	notWTF:"notWTF",
+	omgWhoTheHellCares:"omgWhoTheHellCares",
+	thats_racist:"thats_racist"
 }
+
+# Every rule listed here will be applied only to comments in the subreddits
+# listed next to it. Rules not listed here will be applied to all subreddits
+# in trackingSubreddits.
+subredditRestrictions = {
+	notWTF:["test","wtf"],
+}
+
 
 trackingSubreddits = [
 	"test",
@@ -191,14 +283,25 @@ trackingSubreddits = [
 	"funny",
 	"politics",
 	"gaming",
-	"AskReddit"
+	"AskReddit",
 	"videos",
 	"IAmA",
 	"WTF",
-	"aww",
+	#"aww", #benned
 	"atheism",
-	"AdviceAnimals",
+	#"AdviceAnimals", #benned
 ]
+
+
+# END CONFIGURATION LISTS
+
+
+
+
+######################################################################
+
+# BEGIN DARK ATHEIST PYTHON MAGIC
+
 
 threadsWeveRepliedTo = {}
 file = open("threads.txt")
@@ -218,12 +321,17 @@ for line in file.readlines():
 	repliesWeveMade[ruleName] = list
 file.close()
 
+placeHolders = {}
 file = open("placeHolder.txt")
-placeHolder = file.readlines()[0].strip()
+for line in file.readlines():
+	array = line.split()
+	ruleName = array[0]
+	ph = array[1]
+	placeHolders[ruleName] = ph
 file.close()
 
 def dumpMemory():
-	global placeHolder
+	global placeHolders
 
 	file = open("threads.txt","w")
 	file.write("")
@@ -248,9 +356,10 @@ def dumpMemory():
 	file.close()
 
 	file = open("placeHolder.txt","w")
-	file.write(placeHolder)
+	for ruleName in placeHolders:
+		file.write(ruleName+" "+placeHolders[ruleName]+"\n")
 	file.close()
-	print "Memory sucessfully dumped."
+	print "Memory successfully dumped."
 
 import string
 multiReddit = string.join(trackingSubreddits, "+")
@@ -268,7 +377,10 @@ def implementRule(ruleFunction):
 		else:
 			for i in range(22):
 				try:
-					myReply = reply[1].reply(reply[0]) #DAE reply?
+					if type(reply[1]).__name__ == "Submission":
+						myReply = reply[1].add_comment(reply[0])
+					else:
+						myReply = reply[1].reply(reply[0]) #DAE reply?
 					threadsWeveRepliedTo[listOfRules[ruleFunction]].append(myReply.submission.id)
 					repliesWeveMade[listOfRules[ruleFunction]].append(myReply.id)
 					print "Successfully commented!", myReply.permalink
@@ -281,28 +393,39 @@ def implementRule(ruleFunction):
 
 
 
+
 user_agent = "Bravery bot 1.0 by /u/SurvivalOfTheBravest"
 r = praw.Reddit(user_agent=user_agent)
 r.login(username="SurvivalOfTheBravest", password="thisIsntTheRealPassword")
 subreddits = r.get_subreddit(multiReddit)
 
-implementedRules = [implementRule(rule) for rule in listOfRules]
+implementedRules = [(rule,implementRule(rule)) for rule in listOfRules]
 startTime = time.time()
 while True:
 	print "Start loop."
-	try:
-		comments = subreddits.get_comments(place_holder=placeHolder, limit=500)
-		commentsList = [c for c in comments]
-		print len(commentsList), "comments!"
-		placeHolder = commentsList[0].id
-		for comment in commentsList:
-			body = comment.body
-			for implementedRule in implementedRules:
-				implementedRule(comment,body)
-	except Exception, ex:
-		print "An error occurred:", ex
-	dumpMemory()
-	print "Sleeping..."
+	for sr in trackingSubreddits:
+		try:
+			print "Checking subreddit:", sr
+			if sr in placeHolders:
+				ph = placeHolders[sr]
+			else: ph = None
+			comments = r.get_subreddit(sr).get_comments(place_holder=ph, limit=200)
+			commentsList = [c for c in comments]
+			print len(commentsList), "comments from", sr
+			placeHolders[sr] = commentsList[0].id
+
+			for comment in commentsList:
+				body = comment.body
+				for (rule,implementedRule) in implementedRules:
+					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
+						implementedRule(comment,body)
+
+		except Exception, ex:
+			print "An error occurred:", ex
+
+		dumpMemory()
+
+	print "Done with every subreddit. Sleeping..."
 	time.sleep(90)
 	currentTime = time.time()
 	if currentTime - startTime > 85500:
