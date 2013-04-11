@@ -256,7 +256,7 @@ def hello_timmie(comment, body):
 # This rule brought to you by: /u/bakedpatato
 def EAIsHitler(comment,body):
 	lc = body.lower()
-	if re.search(r'\bea\b', lc) and ("hate" in lc or "never" in lc or "worst company" in lc): # I can't think of any substrings of "hate or "never" so it should be ok. The first statement is a regex looking for space"ea"space in lc
+	if re.search(r'\bea\b', lc) and ("hate" in lc or "never" in lc or "worst company" in lc or "fuck" in lc): # I can't think of any substrings of "hate or "never" so it should be ok. The first statement is a regex looking for space"ea"space in lc
 		return("EA is hit[le]r, amirite?",comment)
 	return None
 
