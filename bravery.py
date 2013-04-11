@@ -223,27 +223,34 @@ def notWTF(comment,body):
 # But only do it half of the time, so it's not immediately obvious what's going on.
 # This rule brought to you by: /u/omgwthc
 def omgWhoTheHellCares(comment,body):
-    if random.randint(0,1) == 1:
-    	if body == "http://youtu.be/s0F3LKaGN2A" and str(comment.author) == "OMG_WhoTheHellCares":
-            responses = [
-                "You're talking to a bot.",
-                "Umm... you realize that's a bot, right?",
-                "Bots replying to bots? When will it end?",
-                "**B O T C E P T I O N**",
-                "Do you seriously have nothing better to do than to sit around all day replying to the SRD bot?"
-            ]
-            return(random.choice(responses), comment)
-    return None
+	if random.randint(0,1) == 1:
+		if body == "http://youtu.be/s0F3LKaGN2A" and str(comment.author) == "OMG_WhoTheHellCares":
+			responses = [
+				"You're talking to a bot.",
+				"Umm... you realize that's a bot, right?",
+				"Bots replying to bots? When will it end?",
+				"**B O T C E P T I O N**",
+				"Do you seriously have nothing better to do than to sit around all day replying to the SRD bot?"
+			]
+			return(random.choice(responses), comment)
+	return None
 
 
 # This rule brought to you by: /u/FrenchfagsCantQueue
 def thats_racist(comment, body):  # srsly, CamelCase for python function names - are you even atheist bro??
-    if False and 'black' in body.lower() and len(body) < 200:
-        return "What the fuck bro?!, that's racist", comment
-    elif "i'm white" in body.lower() and len(body) < 200:  # am I allowed two things? - #YOLO #420-sagan-it
-        return ">I'm white\n\nCheck your privilege!!", comment
-    else:
-        return None
+	if False and 'black' in body.lower() and len(body) < 200:
+		return "What the fuck bro?!, that's racist", comment
+	elif "i'm white" in body.lower() and len(body) < 200:  # am I allowed two things? - #YOLO #420-sagan-it
+		return ">I'm white\n\nCheck your privilege!!", comment
+	else:
+		return None
+
+
+# This rule brought to you by: /u/FrenchfagsCantQueue
+def hello_timmie(comment, body):
+	if str(comment.author) == 'spoderman_tim':
+		return 'Hello spoderman_tim', comment
+	return None
 
 
 # END BRAVERY RULES
@@ -264,7 +271,8 @@ listOfRules = {
 	#fuckYouOrFagResp:"fuckYouOrFagResp"
 	notWTF:"notWTF",
 	omgWhoTheHellCares:"omgWhoTheHellCares",
-	thats_racist:"thats_racist"
+	thats_racist:"thats_racist",
+	hello_timmie:"hello_timmie",
 }
 
 # Every rule listed here will be applied only to comments in the subreddits
@@ -272,6 +280,7 @@ listOfRules = {
 # in trackingSubreddits.
 subredditRestrictions = {
 	notWTF:["test","wtf"],
+	hello_timmie:["braveryjerk"],
 }
 
 
@@ -283,10 +292,10 @@ trackingSubreddits = [
 	"funny",
 	"politics",
 	"gaming",
-	"AskReddit",
+	"askreddit",
 	"videos",
-	"IAmA",
-	"WTF",
+	"iama",
+	"wtf",
 	#"aww", #benned
 	"atheism",
 	#"AdviceAnimals", #benned
@@ -396,7 +405,7 @@ def implementRule(ruleFunction):
 
 user_agent = "Bravery bot 1.0 by /u/SurvivalOfTheBravest"
 r = praw.Reddit(user_agent=user_agent)
-r.login(username="SurvivalOfTheBravest", password="thisIsntTheRealPassword")
+r.login(username="SurvivalOfTheBravest", password="")
 subreddits = r.get_subreddit(multiReddit)
 
 implementedRules = [(rule,implementRule(rule)) for rule in listOfRules]
@@ -409,7 +418,11 @@ while True:
 			if sr in placeHolders:
 				ph = placeHolders[sr]
 			else: ph = None
-			comments = r.get_subreddit(sr).get_comments(place_holder=ph, limit=200)
+
+			if sr == "askreddit": lim = 800
+			else: lim = 500
+
+			comments = r.get_subreddit(sr).get_comments(place_holder=ph, limit=lim)
 			commentsList = [c for c in comments]
 			print len(commentsList), "comments from", sr
 			placeHolders[sr] = commentsList[0].id
@@ -426,7 +439,7 @@ while True:
 		dumpMemory()
 
 	print "Done with every subreddit. Sleeping..."
-	time.sleep(90)
+	time.sleep(61)
 	currentTime = time.time()
 	if currentTime - startTime > 85500:
 		print "Timed out after 23:45."
