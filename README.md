@@ -15,7 +15,7 @@ This decision is expressed in a RETURN STATEMENT: a line of code
  that says "return [something]"
 In most cases, you're going to want to do nothing. For this, say:
 
-  return None
+	return None
 
 What if you want to make a comment in response? Then, your return
  statement will look like:
@@ -40,7 +40,7 @@ For more information about PRAW, see:
 In particular, this documentation tells you how to access
  information about the comment, such as:
 
-comment.author	(the user who wrote it)
+	comment.author	(the user who wrote it)
 
 The easiest way to get started is to just copy the existing examples
  and modify them till they do what you want.
