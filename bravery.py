@@ -261,6 +261,30 @@ def EAIsHitler(comment,body):
 	return None
 
 
+# Here's one for people who have a constant urge to point out their
+# rationale for literally anything:
+# This rule brought to you by: /u/Carl_Bravery_Sagan
+def source(comment, body):
+	lc = body.lower()
+	if False: #TODO
+		asAResponse = [
+			"As a brave sir, I can confirm this.",
+			"As a bravard, I can say the same.",
+			"As a fellow <take the between 1 and 4 words that were matched in the if statement>, I too can confirm this.",
+			"As a brave person, you are brave. Source: Am brave"
+		]
+		return(random.choice(asAResponse), comment)
+	elif "source:" in lc:
+		sourceResponse = [
+			"I too can confirm this. Source: Am brave",
+			"This is a brave comment. Source: Brave",
+			"I can confirm what this bravard said. Source: Also brave",
+			"As a brave ENTgineer, I can confirm this. #420yoloswag"
+		]
+		return(random.choice(sourceResponse), comment)
+	return None
+
+
 # END BRAVERY RULES
 
 
@@ -282,6 +306,7 @@ listOfRules = {
 	thats_racist:"thats_racist",
 	hello_timmie:"hello_timmie",
 	EAIsHitler:"EAIsHitler",
+	source:"source"
 }
 
 # Every rule listed here will be applied only to comments in the subreddits
@@ -405,18 +430,19 @@ def implementRule(ruleFunction):
 			if threadID in threadsWeveRepliedTo[listOfRules[ruleFunction]]:
 				print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
 			else:
-				for i in range(22):
+				if delayedComments:
+					#There are already comments in the queue. Add this to the end.
+					delayedComments.append((reply, ruleFunction, threadID))
+					print "Comment has been queued brecause there are already comments waiting."
+				else:
 					try:
 						makeComment(reply, ruleFunction)
-						break
 					except Exception, ex:
 						if "you are doing that too much. try again in" in str(ex):
 							delayedComments.append((reply, ruleFunction, threadID))
-							print "Comment has been delayed. We'll try again later."
-							break
+							print "Comment has been delayed.", str(ex)
 						else:
-							print "Something went wrong! Try again 22 times.", ex
-						time.sleep(30)
+							print "Something went wrong! We will not try this comment again.", ex
 	return implementation
 
 
@@ -468,23 +494,20 @@ while True:
 			if threadID in threadsWeveRepliedTo[listOfRules[ruleFunction]]:
 				print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
 			else:
-				for i in range(5):
-					try:
-						makeComment(reply, ruleFunction)
-						break
-					except Exception, ex:
-						if i==4 and "you are doing that too much. try again in" in str(ex):
-							nextDelayedComments.append((reply, ruleFunction, threadID))
-							print "We still couldn't post the comment. Deferred to the next round."
-							break
-						else:
-							print "Something went wrong! Try again 5 times.", ex
-						time.sleep(30)
+				try:
+					makeComment(reply, ruleFunction)
+				except Exception, ex:
+					if "you are doing that too much. try again in" in str(ex):
+						nextDelayedComments.append((reply, ruleFunction, threadID))
+						print "We still couldn't post the comment. Deferred to the next round.", str(ex)
+					else:
+						print "Something went wrong! We will not try the comment again.", ex
 		dumpMemory()
-		print "Finished with delayed comments."
+		print "Finished with the delayed comments."
 	else:
-		print "No delayed comments, so we'll sleep."
-		time.sleep(72)
+		print "No delayed comments."
+	print "Sleeping..."
+	time.sleep(90)
 	currentTime = time.time()
 	if currentTime - startTime > 85500:
 		print "Timed out after 23:45."
