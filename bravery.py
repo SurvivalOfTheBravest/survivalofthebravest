@@ -4,11 +4,16 @@ import praw
 import random
 
 
+PASSWORD = ""
+
 
 ######################################################################
 
-# BEGIN BRAVERY RULES.
+################## BEGIN BRAVERY RULES.
 
+
+
+#### SECTION 1: RULES TO APPLY TO COMMENTS
 
 
 # Replies with "/r/onetruegod" to anyone who mentions Nicolas Cage
@@ -265,7 +270,7 @@ def EAIsHitler(comment,body):
 # rationale for literally anything:
 # This rule brought to you by: /u/Carl_Bravery_Sagan
 def source(comment, body):
-	lc = body.lower()
+	#lc = body.lower()
 	if False: #TODO
 		asAResponse = [
 			"As a brave sir, I can confirm this.",
@@ -274,7 +279,7 @@ def source(comment, body):
 			"As a brave person, you are brave. Source: Am brave"
 		]
 		return(random.choice(asAResponse), comment)
-	elif "source:" in lc:
+	elif random.randint(0,7)==0 and "source:" in body.lower():
 		sourceResponse = [
 			"I too can confirm this. Source: Am brave",
 			"This is a brave comment. Source: Brave",
@@ -285,7 +290,95 @@ def source(comment, body):
 	return None
 
 
-# END BRAVERY RULES
+
+# Made with the power of Emacs -nox
+# Gives those with true Bravery the power to summon SurvivalOfTheBravest
+# Regular expression rules via re module can be found at http://docs.python.org/2/library/re.html
+# This rule brought to you by: /u/zamnedix
+def randomPasta(comment, body):
+	loweredBody = body.lower()
+	#Pastas, feel free to add to it
+	pastas = ["I'm 12 and what is this",
+		"In this moment, I am euphoric. Not because of a phony god's blessing, but because, I am enlightened by my own intelligence.",
+		"Is this Battletoads?", "Has anyone really been far even as decided to use even go want to do look more like?"
+	]
+
+	# Triggers the bot to respond - feel free to add to it
+	patterns = ["By the power of Greyskull", "Dawkins", "Neil.Tyson", "aalewis" ]
+
+	for pattern in patterns:
+	   #Search comment body case insensitively for each trigger pattern, evaluating regular expressions per Python's re module
+	   if re.search(pattern.lower(), loweredBody):
+		  #If a MatchObject instance is returned, return with one of the pastas.
+		  return (random.choice(pastas), comment)
+
+	# No triggers found, bravery on standby
+	return None
+
+
+
+# Request bravery: makes post to /r/SurvivalOfTheBravest linking to comment
+# containing "!requestbravery" or something. To help brave soldiers in the 
+# fields of nonbravery.
+# This rule brought to you by: /u/Fauxm
+def requestBravery( comment, body ):
+	if "!requestbravery" in body.lower():
+			bravereqName = str( comment.author )
+			#I have no idea how to use praw to get the comment permalink, set it to the variable 'commentPerm' or something
+			def action():
+
+				r.login(username="SOTB-bot", password=PASSWORD)
+				output = r.submit(
+					'SurvivalOfTheBravest',
+					'User ' + bravereqName + ' is requesting bravery!',
+					url=comment.permalink
+				)
+				r.login(username="SurvivalOfTheBravest", password=PASSWORD)
+				return output
+
+			return action
+	return None
+
+
+# A rule for people who need their privilege checked constantly
+# This rule brought to you by /u/The_Jakebob
+def checkYourPrivilege(comment,body):
+	lower = body.lower()
+	if "transphobia" in lower or "homophobia" in lower or "feminism" in lower or "feminist" in lower:
+			privilegeResp = [
+					"Wow, how could you say that?",
+					"Check your privilege before saying things like that!",
+					"There are starving children in africa and you are concerning yourself with nominal issues like this?",
+					"That's rude of you to say, I bet your mother is ashamed.",
+					"Show some compassion",
+					"I am gay and I find that highly offensive!",
+					"DIE CIS SCUM!",
+					"JUST BECAUSE YOU ARE CISGENDERED DOESN'T MEAN YOU HAVE TO GO PICKING ON ME"
+			]
+			return(random.choice(privilegeResp),comment)
+	return None
+
+
+
+#### SECTION 2: RULES TO APPLY TO SUBMISSIONS
+
+
+
+# This rule brought to you by: /u/1cerazor
+def n_noHomo(submission, url, selftext):
+	if not selftext:
+		return None
+	else:
+		lowercaseText = selftext.lower()
+		if "[progress pic" in lowercaseText or "progress pic:" in lowercaseText or "progress pics:" in lowercaseText:
+			return("Awesome pics. Great size. Look thick. Solid. Tight. Keep us all posted on your continued progress with any new progress pics or vid clips. Show us what you got man. Wanna see how freakin' huge, solid, thick and tight you can get. Thanks for the motivation.", submission)
+		else:
+			return None
+
+
+
+
+################## END BRAVERY RULES
 
 
 # BEGIN CONFIGURATION LISTS
@@ -306,18 +399,18 @@ listOfRules = {
 	thats_racist:"thats_racist",
 	hello_timmie:"hello_timmie",
 	EAIsHitler:"EAIsHitler",
-	source:"source"
-}
-
-# Every rule listed here will be applied only to comments in the subreddits
-# listed next to it. Rules not listed here will be applied to all subreddits
-# in trackingSubreddits.
-subredditRestrictions = {
-	notWTF:["test","wtf"],
-	hello_timmie:["braveryjerk"],
+	source:"source",
+	randomPasta:"randomPasta",
+	requestBravery:"requestBravery",
+	checkYourPrivilege:"checkYourPrivilege"
 }
 
 
+listOfSubmissionRules = {
+	n_noHomo:"n_noHomo",
+}
+
+# List of subreddits to check all rules in.
 trackingSubreddits = [
 	"test",
 	"braveryjerk",
@@ -334,6 +427,24 @@ trackingSubreddits = [
 	"atheism",
 	#"AdviceAnimals", #benned
 ]
+
+# These subreddits will not be checked by any rules EXCEPT those which explicitly
+# say so in subredditRestrictions.
+specialSubreddits = [
+	"fitness",
+]
+
+# Every rule listed here will be applied only to comments or submissions in the
+# subreddits listed next to it. Rules not listed here will be applied to all
+# subreddits in trackingSubreddits.
+subredditRestrictions = {
+	notWTF:["test","wtf"],
+	hello_timmie:["braveryjerk"],
+	n_noHomo:["fitness"]
+}
+
+
+
 
 
 # END CONFIGURATION LISTS
@@ -373,8 +484,20 @@ for line in file.readlines():
 	placeHolders[ruleName] = ph
 file.close()
 
+
+submissionPlaceHolders = {}
+file = open("submissionPlaceHolder.txt")
+for line in file.readlines():
+	array = line.split()
+	ruleName = array[0]
+	ph = array[1]
+	submissionPlaceHolders[ruleName] = ph
+file.close()
+
+
 def dumpMemory():
 	global placeHolders
+	global submissionPlaceHolders
 
 	file = open("threads.txt","w")
 	file.write("")
@@ -402,19 +525,41 @@ def dumpMemory():
 	for ruleName in placeHolders:
 		file.write(ruleName+" "+placeHolders[ruleName]+"\n")
 	file.close()
+
+	file = open("submissionPlaceHolder.txt","w")
+	for ruleName in submissionPlaceHolders:
+		file.write(ruleName+" "+submissionPlaceHolders[ruleName]+"\n")
+	file.close()
+
 	print "Memory successfully dumped."
 
 
 delayedComments = []
 nextDelayedComments = []
 
-def makeComment(reply, ruleFunction):
-	if type(reply[1]).__name__ == "Submission":
+def makeComment(reply, ruleFunction): # Actually makes both comments and submissions.
+	if type(reply).__name__ == "function":
+		myReply = reply()
+	elif type(reply[1]).__name__ == "Submission":
 		myReply = reply[1].add_comment(reply[0])
-	else:
+	elif type(reply[1]).__name__ == "Comment": #TODO Is this correct?
 		myReply = reply[1].reply(reply[0]) #DAE reply?
-	threadsWeveRepliedTo[listOfRules[ruleFunction]].append(myReply.submission.id)
-	repliesWeveMade[listOfRules[ruleFunction]].append(myReply.id)
+	else:
+		print "WARNING: UNKNOWN REPLY TYPE! EXCEPTION WILL SOON BE RAISED!"
+
+	if type(myReply).__name__ == "Comment":
+		thread = myReply.submission.id
+	if type(myReply).__name__ == "Submission":
+		thread = myReply.id
+
+	if ruleFunction in listOfRules:
+		threadsWeveRepliedTo[listOfRules[ruleFunction]].append(thread)
+		repliesWeveMade[listOfRules[ruleFunction]].append(myReply.id)
+	elif ruleFunction in listOfSubmissionRules:
+		threadsWeveRepliedTo[listOfSubmissionRules[ruleFunction]].append(thread)
+		repliesWeveMade[listOfSubmissionRules[ruleFunction]].append(myReply.id)
+	else:
+		print "WARNING: UNKNOWN RULE TYPE!"
 	print "Successfully commented!", myReply.permalink
 
 
@@ -433,7 +578,33 @@ def implementRule(ruleFunction):
 				if delayedComments:
 					#There are already comments in the queue. Add this to the end.
 					delayedComments.append((reply, ruleFunction, threadID))
-					print "Comment has been queued brecause there are already comments waiting."
+					print "Comment has been queued because there are already comments waiting."
+				else:
+					try:
+						makeComment(reply, ruleFunction)
+					except Exception, ex:
+						if "you are doing that too much. try again in" in str(ex):
+							delayedComments.append((reply, ruleFunction, threadID))
+							print "Comment has been delayed.", str(ex)
+						else:
+							print "Something went wrong! We will not try this comment again.", ex
+	return implementation
+
+
+def implementSubmissionRule(ruleFunction):
+	def implementation(submission,url,selftext):
+		reply = ruleFunction(submission,url,selftext)
+		if not reply:
+			pass # No rules apply.
+		else:
+			threadID = submission.id
+			if threadID in threadsWeveRepliedTo[listOfSubmissionRules[ruleFunction]]:
+				print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
+			else:
+				if delayedComments:
+					#There are already comments in the queue. Add this to the end.
+					delayedComments.append((reply, ruleFunction, threadID))
+					print "Comment has been queued because there are already comments waiting."
 				else:
 					try:
 						makeComment(reply, ruleFunction)
@@ -447,51 +618,108 @@ def implementRule(ruleFunction):
 
 
 
+def checkSubreddit(sr):
+	try:
+		print "Checking subreddit:", sr
+		if sr in placeHolders:
+			ph = placeHolders[sr]
+		else: ph = None
+
+		if sr == "askreddit": lim = 800
+		else: lim = 500
+
+		comments = r.get_subreddit(sr).get_comments(place_holder=ph, limit=lim)
+		commentsList = [c for c in comments]
+		placeHolders[sr] = commentsList[0].id
+		commentsList = commentsList[:-1]
+		print len(commentsList), "comments from", sr
+
+		for comment in commentsList:
+			body = comment.body
+			for (rule,implementedRule) in implementedRules:
+				if sr in trackingSubreddits:
+					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
+						implementedRule(comment,body)
+				elif sr in specialSubreddits:
+					if rule in subredditRestrictions and sr in subredditRestrictions[rule]:
+						implementedRule(comment,body)
+				else:
+					print "WARNING! THIS LINE SHOULD NEVER BE PRINTED!"
+
+	except Exception, ex:
+		print "An error occurred:", ex
+
+	dumpMemory()
+
+
+
+def checkSubmissions(sr):
+	try:
+		if sr in submissionPlaceHolders:
+			sph = submissionPlaceHolders[sr]
+		else:
+			sph = None
+		submissions = r.get_subreddit(sr).get_new(place_holder=sph,limit=40)
+		submissionsList = [s for s in submissions]
+
+		submissionPlaceHolders[sr] = submissionsList[0].id
+		submissionsList = submissionsList[:-1]
+		print len(submissionsList), "submissions from", sr
+		for submission in submissionsList:
+			url = submission.url
+			selftext = submission.selftext
+			for (rule,implementedRule) in implementedSubmissionRules:
+				if sr in trackingSubreddits:
+					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
+						implementedRule(submission,url,selftext)
+				elif sr in specialSubreddits:
+					if rule in subredditRestrictions and sr in subredditRestrictions[rule]:
+						implementedRule(submission,url,selftext)
+				else:
+					print "WARNING! THIS LINE SHOULD NEVER BE PRINTED!"
+
+	except Exception, ex:
+		print "An error occurred:", ex
+
+	dumpMemory()
+
+
 
 
 user_agent = "Bravery bot 1.0 by /u/SurvivalOfTheBravest"
 r = praw.Reddit(user_agent=user_agent)
-r.login(username="SurvivalOfTheBravest", password="")
+r.login(username="SurvivalOfTheBravest", password=PASSWORD)
 
 
-implementedRules = [(rule,implementRule(rule)) for rule in listOfRules]
+implementedRules =           [(rule,implementRule(rule))           for rule in listOfRules]
+implementedSubmissionRules = [(rule,implementSubmissionRule(rule)) for rule in listOfSubmissionRules]
 startTime = time.time()
 while True:
 	print "Start loop."
 	delayedComments = nextDelayedComments
 	nextDelayedComments = []
+
+	print "Checking comments:"
 	for sr in trackingSubreddits:
-		try:
-			print "Checking subreddit:", sr
-			if sr in placeHolders:
-				ph = placeHolders[sr]
-			else: ph = None
+		checkSubreddit(sr)
+	for sr in specialSubreddits:
+		checkSubreddit(sr)
 
-			if sr == "askreddit": lim = 800
-			else: lim = 500
-
-			comments = r.get_subreddit(sr).get_comments(place_holder=ph, limit=lim)
-			commentsList = [c for c in comments]
-			print len(commentsList), "comments from", sr
-			placeHolders[sr] = commentsList[0].id
-
-			for comment in commentsList:
-				body = comment.body
-				for (rule,implementedRule) in implementedRules:
-					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
-						implementedRule(comment,body)
-
-		except Exception, ex:
-			print "An error occurred:", ex
-
-		dumpMemory()
+	print "Checking submissions:"
+	# This shouldn't really be like this, but it is because the only rule
+	# checking submissions is restricted to /r/fitness.
+	for sr in ["test"]: #trackingSubreddits:
+		checkSubmissions(sr)
+	for sr in specialSubreddits:
+		checkSubmissions(sr)	
+		
 
 	print "Done with every subreddit."
 
 	if delayedComments:
 		print "We will now attempt to make the", len(delayedComments), "delayed comments."
 		for (reply, ruleFunction, threadID) in delayedComments:
-			if threadID in threadsWeveRepliedTo[listOfRules[ruleFunction]]:
+			if threadID in threadsWeveRepliedTo[listOfRules[ruleFunction] if (ruleFunction in listOfRules) else listOfSubmissionRules[ruleFunction]]:
 				print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
 			else:
 				try:
@@ -507,7 +735,7 @@ while True:
 	else:
 		print "No delayed comments."
 	print "Sleeping..."
-	time.sleep(90)
+	time.sleep(60)
 	currentTime = time.time()
 	if currentTime - startTime > 85500:
 		print "Timed out after 23:45."
