@@ -318,7 +318,7 @@ def randomPasta(comment, body):
 
 
 # Request bravery: makes post to /r/SurvivalOfTheBravest linking to comment
-# containing "!requestbravery" or something. To help brave soldiers in the 
+# containing "!requestbravery" or something. To help brave soldiers in the
 # fields of nonbravery.
 # This rule brought to you by: /u/Fauxm
 def requestBravery( comment, body ):
@@ -328,12 +328,17 @@ def requestBravery( comment, body ):
 			def action():
 
 				r.login(username="SOTB-bot", password=PASSWORD)
-				output = r.submit(
-					'SurvivalOfTheBravest',
-					'User ' + bravereqName + ' is requesting bravery!',
-					url=comment.permalink
-				)
-				r.login(username="SurvivalOfTheBravest", password=PASSWORD)
+				try:
+					output = r.submit(
+						'SurvivalOfTheBravest',
+						'User ' + bravereqName + ' is requesting bravery!',
+						url=comment.permalink
+					)
+				except Exception, ex:
+					print "Exception in action requestBravery:", ex
+					output = None
+				finally:
+					r.login(username="SurvivalOfTheBravest", password=PASSWORD)
 				return output
 
 			return action
@@ -365,12 +370,13 @@ def checkYourPrivilege(comment,body):
 
 
 # This rule brought to you by: /u/1cerazor
-def n_noHomo(submission, url, selftext):
-	if not selftext:
+def n_noHomo(submission, is_self, title, url, selftext):
+	if not is_self:
 		return None
 	else:
 		lowercaseText = selftext.lower()
-		if "[progress pic" in lowercaseText or "progress pic:" in lowercaseText or "progress pics:" in lowercaseText:
+		lowercaseTitle = title.lower()
+		if "progress pic" in lowercaseText or "before and after" in lowercaseText or "progress pic" in lowercaseTitle or "before and after" in lowercaseTitle:
 			return("Awesome pics. Great size. Look thick. Solid. Tight. Keep us all posted on your continued progress with any new progress pics or vid clips. Show us what you got man. Wanna see how freakin' huge, solid, thick and tight you can get. Thanks for the motivation.", submission)
 		else:
 			return None
@@ -417,14 +423,14 @@ trackingSubreddits = [
 	"circlejerk",
 	"pics",
 	"funny",
-	"politics",
+	#"politics", #benned
 	"gaming",
 	"askreddit",
 	"videos",
 	"iama",
-	"wtf",
+	#"wtf", #benned
 	#"aww", #benned
-	"atheism",
+	#"atheism", #benned
 	#"AdviceAnimals", #benned
 ]
 
@@ -440,7 +446,7 @@ specialSubreddits = [
 subredditRestrictions = {
 	notWTF:["test","wtf"],
 	hello_timmie:["braveryjerk"],
-	n_noHomo:["fitness"]
+	n_noHomo:["fitness","test"]
 }
 
 
@@ -549,8 +555,10 @@ def makeComment(reply, ruleFunction): # Actually makes both comments and submiss
 
 	if type(myReply).__name__ == "Comment":
 		thread = myReply.submission.id
-	if type(myReply).__name__ == "Submission":
+	elif type(myReply).__name__ == "Submission":
 		thread = myReply.id
+	else:
+		raise Exception("Error: myReply is of unknown type: "+type(myReply).__name__)
 
 	if ruleFunction in listOfRules:
 		threadsWeveRepliedTo[listOfRules[ruleFunction]].append(thread)
@@ -592,8 +600,8 @@ def implementRule(ruleFunction):
 
 
 def implementSubmissionRule(ruleFunction):
-	def implementation(submission,url,selftext):
-		reply = ruleFunction(submission,url,selftext)
+	def implementation(submission,is_self,title,url,selftext):
+		reply = ruleFunction(submission,is_self,title,url,selftext)
 		if not reply:
 			pass # No rules apply.
 		else:
@@ -666,15 +674,17 @@ def checkSubmissions(sr):
 		submissionsList = submissionsList[:-1]
 		print len(submissionsList), "submissions from", sr
 		for submission in submissionsList:
+			is_self = submission.is_self
+			title = submission.title
 			url = submission.url
 			selftext = submission.selftext
 			for (rule,implementedRule) in implementedSubmissionRules:
 				if sr in trackingSubreddits:
 					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
-						implementedRule(submission,url,selftext)
+						implementedRule(submission,is_self,title,url,selftext)
 				elif sr in specialSubreddits:
 					if rule in subredditRestrictions and sr in subredditRestrictions[rule]:
-						implementedRule(submission,url,selftext)
+						implementedRule(submission,is_self,title,url,selftext)
 				else:
 					print "WARNING! THIS LINE SHOULD NEVER BE PRINTED!"
 
@@ -711,8 +721,8 @@ while True:
 	for sr in ["test"]: #trackingSubreddits:
 		checkSubmissions(sr)
 	for sr in specialSubreddits:
-		checkSubmissions(sr)	
-		
+		checkSubmissions(sr)
+
 
 	print "Done with every subreddit."
 
