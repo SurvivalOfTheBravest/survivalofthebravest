@@ -2,18 +2,22 @@
 import time
 import praw
 import random
-
-
-PASSWORD = ""
+import string
+from password import PASSWORD
+USERNAME = "VULGARITY_IN_ALLCAPS"
 
 
 ######################################################################
+####################### BEGIN BRAVERY RULES. #########################
 
-################## BEGIN BRAVERY RULES.
+
 
 
 
 #### SECTION 1: RULES TO APPLY TO COMMENTS
+
+
+## ROUND 1 RULES ##
 
 
 # Replies with "/r/onetruegod" to anyone who mentions Nicolas Cage
@@ -70,6 +74,7 @@ def atheismIsShit(comment,body):
 		return("Ctrl-F \"this is why /r/atheism is shit\", was not dissapointed",comment)
 	return None
 
+
 import re
 # This rule brought to you by: /u/RollCakeTroll
 def noWords(comment,body):
@@ -87,6 +92,7 @@ def everyThread(comment, body):
 	if "broken arms" in lowercaseComment or "arms broken" in lowercaseComment:
 		return("WOW EVERY THREAD! /r/incest is THAT way xDDD!!", comment)
 	return None
+
 
 # WOW, BEASTIALITY TOO? DAE?
 # Replies with either a picture of Colby Jack cheese, a dog with Mitt Romney, or a copypasta.
@@ -290,7 +296,6 @@ def source(comment, body):
 	return None
 
 
-
 # Made with the power of Emacs -nox
 # Gives those with true Bravery the power to summon SurvivalOfTheBravest
 # Regular expression rules via re module can be found at http://docs.python.org/2/library/re.html
@@ -316,7 +321,6 @@ def randomPasta(comment, body):
 	return None
 
 
-
 # Request bravery: makes post to /r/SurvivalOfTheBravest linking to comment
 # containing "!requestbravery" or something. To help brave soldiers in the
 # fields of nonbravery.
@@ -338,7 +342,7 @@ def requestBravery( comment, body ):
 					print "Exception in action requestBravery:", ex
 					output = None
 				finally:
-					r.login(username="SurvivalOfTheBravest", password=PASSWORD)
+					r.login(username=USERNAME, password=PASSWORD)
 				return output
 
 			return action
@@ -351,37 +355,62 @@ def checkYourPrivilege(comment,body):
 	lower = body.lower()
 	if "transphobia" in lower or "homophobia" in lower or "feminism" in lower or "feminist" in lower:
 			privilegeResp = [
-					"Wow, how could you say that?",
-					"Check your privilege before saying things like that!",
-					"There are starving children in africa and you are concerning yourself with nominal issues like this?",
-					"That's rude of you to say, I bet your mother is ashamed.",
-					"Show some compassion",
-					"I am gay and I find that highly offensive!",
-					"DIE CIS SCUM!",
-					"JUST BECAUSE YOU ARE CISGENDERED DOESN'T MEAN YOU HAVE TO GO PICKING ON ME"
+				"Wow, how could you say that?",
+				"Check your privilege before saying things like that!",
+				"There are starving children in africa and you are concerning yourself with nominal issues like this?",
+				"That's rude of you to say, I bet your mother is ashamed.",
+				"Show some compassion",
+				"I am gay and I find that highly offensive!",
+				"DIE CIS SCUM!",
+				"JUST BECAUSE YOU ARE CISGENDERED DOESN'T MEAN YOU HAVE TO GO PICKING ON ME"
 			]
 			return(random.choice(privilegeResp),comment)
 	return None
 
-# A Rule to reply to bad comments
-# This rule is brought to you by xVVhiteboy
 
+
+## ROUND 2 RULES ##
+
+
+# A Rule to reply to bad comments
+# This rule is brought to you by: /u/xVVhiteboy
 def badComments(comment,body):
 	lower = body.lower()
 	if "cool story bro" in lower or "calm down" in lower or "troll" in lower or "asshole" in lower:
 			badcommentReplys = [
-					"[WORLD BUTTHURPED CHAMPION](http://i.imgur.com/O0v2dNQ.png)",
-					"[COLONRAMPAGE'D](http://i.imgur.com/VA6UEZu.jpg)",
-					"[BUTTDEVESTATED](http://i.imgur.com/oBbwnHY.jpg)",
-					"[master trole 2013](http://i.imgur.com/4O2QrcW.jpg)",
-					"[i was only pretending](http://i.imgur.com/aaODnol.jpg)",
+				"[WORLD BUTTHURPED CHAMPION](http://i.imgur.com/O0v2dNQ.png)",
+				"[COLONRAMPAGE'D](http://i.imgur.com/VA6UEZu.jpg)",
+				"[BUTTDEVESTATED](http://i.imgur.com/oBbwnHY.jpg)",
+				"[master trole 2013](http://i.imgur.com/4O2QrcW.jpg)",
+				"[i was only pretending](http://i.imgur.com/aaODnol.jpg)",
 			]
 			return(random.choice(badcommentReplys),comment)
 	return None
 
+
+# This rule brought to you by: /u/RainbowDashIsEpic
+def breadsticks(comment, body):
+    lc = body.lower()
+    if "olive garden" in lc or "breadsticks" in lc or "unlimited breadsticks" in lc or "infinite breadsticks" in lc or "breadstick" in lc:
+        return("/r/unlimitedbreadsticks", comment)
+    return None
+
+
+# This rule brought to you by: /u/feblehober123
+def penisEnlargementPill(comment,body):
+    lowercaseComment = body.lower()
+    if "reddit enhancement suite" in lowercaseComment:
+        pep = string.join(["penis enlargement pill" for x in re.finditer("reddit enhancement suite",lowercaseComment)]," ")
+        return(pep, comment)
+    return None
+
+
+
+
 #### SECTION 2: RULES TO APPLY TO SUBMISSIONS
 
 
+## ROUND 1 RULES ##
 
 # This rule brought to you by: /u/1cerazor
 def n_noHomo(submission, is_self, title, url, selftext):
@@ -396,39 +425,54 @@ def n_noHomo(submission, is_self, title, url, selftext):
 			return None
 
 
+## ROUND 1 RULES ##
 
 
-################## END BRAVERY RULES
+#None yet.
 
 
-# BEGIN CONFIGURATION LISTS
 
-listOfRules = {
-	oneTrueGod:"oneTrueGod",
+
+######################## END BRAVERY RULES. ##########################
+######################################################################
+
+
+
+
+
+######################################################################
+##################### BEGIN CONFIGURATION LISTS ######################
+
+
+listOfRules = { #Rules to apply to comments.
+	#leColby:"leColby",							#benned from Round 1
+	#fuckYouOrFagResp:"fuckYouOrFagResp"		#benned from Round 1
+	#notWTF:"notWTF",							#benned from Round 1
+	#everyThread:"everyThread",					#culled from Round 1
+	#navySealPasta:"navySealPasta",				#culled from Round 1
+	#omgWhoTheHellCares:"omgWhoTheHellCares",	#culled from Round 1
+	#EAIsHitler:"EAIsHitler",					#culled from Round 1
+	#source:"source",							#culled from Round 1
+	#checkYourPrivilege:"checkYourPrivilege"	#culled from Round 1
+	oneTrueGod:"oneTrueGod",					#ROUND 1
 	sarahJessicaParker:"sarahJessicaParker",
 	murica:"murica",
 	anneFrankly:"anneFrankly",
 	atheismIsShit:"atheismIsShit",
 	noWords:"noWords",
-	everyThread:"everyThread",
-	#leColby:"leColby",
-	navySealPasta:"navySealPasta",
-	#fuckYouOrFagResp:"fuckYouOrFagResp"
-	notWTF:"notWTF",
-	omgWhoTheHellCares:"omgWhoTheHellCares",
 	thats_racist:"thats_racist",
 	hello_timmie:"hello_timmie",
-	EAIsHitler:"EAIsHitler",
-	source:"source",
 	randomPasta:"randomPasta",
 	requestBravery:"requestBravery",
-	checkYourPrivilege:"checkYourPrivilege"
-	badComments:"badComments"
+
+	badComments:"badComments",					#ROUND 2
+	breadsticks:"breadsticks",
+	penisEnlargementPill:"penisEnlargementPill",
 }
 
 
-listOfSubmissionRules = {
-	n_noHomo:"n_noHomo",
+listOfSubmissionRules = { #Rules to apply to submissions.
+	#n_noHomo:"n_noHomo", 						#culled from Round 1
 }
 
 # List of subreddits to check all rules in.
@@ -438,45 +482,40 @@ trackingSubreddits = [
 	"circlejerk",
 	"pics",
 	"funny",
-	#"politics", #benned
+	"politics",
 	"gaming",
 	"askreddit",
 	"videos",
 	"iama",
-	#"wtf", #benned
-	#"aww", #benned
-	#"atheism", #benned
-	#"AdviceAnimals", #benned
+	"wtf",
+	"aww",
+	"atheism",
+	"AdviceAnimals",
+	"todayilearned",
 ]
 
 # These subreddits will not be checked by any rules EXCEPT those which explicitly
 # say so in subredditRestrictions.
 specialSubreddits = [
-	"fitness",
 ]
 
 # Every rule listed here will be applied only to comments or submissions in the
 # subreddits listed next to it. Rules not listed here will be applied to all
 # subreddits in trackingSubreddits.
 subredditRestrictions = {
-	notWTF:["test","wtf"],
-	hello_timmie:["braveryjerk"],
-	n_noHomo:["fitness","test"]
 }
 
 
+###################### END CONFIGURATION LISTS #######################
+######################################################################
 
 
-
-# END CONFIGURATION LISTS
 
 
 
 
 ######################################################################
-
-# BEGIN DARK ATHEIST PYTHON MAGIC
-
+################## BEGIN DARK ATHEIST PYTHON MAGIC ###################
 
 threadsWeveRepliedTo = {}
 file = open("threads.txt")
@@ -505,7 +544,6 @@ for line in file.readlines():
 	placeHolders[ruleName] = ph
 file.close()
 
-
 submissionPlaceHolders = {}
 file = open("submissionPlaceHolder.txt")
 for line in file.readlines():
@@ -515,10 +553,47 @@ for line in file.readlines():
 	submissionPlaceHolders[ruleName] = ph
 file.close()
 
+feederPlaceHolder = ""
+file = open("feederPlaceHolder.txt")
+for line in file.readlines():
+	feederPlaceHolder = line
+	break
+file.close()
+
+throttlingFactors = {}
+file = open("throttlingFactors.txt")
+for line in file.readlines():
+	array = line.split()
+	ruleName = array[0]
+	tf = array[1]
+	throttlingFactors[ruleName] = float(tf)
+file.close()
+
+for rule in listOfRules:
+	ruleName = listOfRules[rule]
+	if ruleName not in throttlingFactors: throttlingFactors[ruleName] = 1
+for ruleName in listOfSubmissionRules:
+	ruleName = listOfRules[rule]
+	if ruleName not in throttlingFactors: throttlingFactors[ruleName] = 1
+
+feederThreadsWeveAnswered = []
+feederRepliesWeveMade = []
+file = open("feederHistory.txt")
+lines = file.readlines()
+feederThreadsWeveAnswered = lines[0].split()
+feederRepliesWeveMade = lines[1].split()
+file.close()
+
+
+
+
+
+
 
 def dumpMemory():
 	global placeHolders
 	global submissionPlaceHolders
+	global feederPlaceHolder
 
 	file = open("threads.txt","w")
 	file.write("")
@@ -552,7 +627,30 @@ def dumpMemory():
 		file.write(ruleName+" "+submissionPlaceHolders[ruleName]+"\n")
 	file.close()
 
+	file = open("feederPlaceHolder.txt","w")
+	file.write(feederPlaceHolder)
+	file.close()
+
+	file = open("feederHistory.txt","w")
+	file.write(string.join(feederThreadsWeveAnswered," "))
+	file.write("\n")
+	file.write(string.join(feederRepliesWeveMade," "))
+	file.close()
+
 	print "Memory successfully dumped."
+
+
+def dumpThrottlingFactors():
+	file = open("throttlingFactors.txt","w")
+	file.write("")
+	file.close()
+	file = open("throttlingFactors.txt","a")
+	for ruleName in throttlingFactors:
+		file.write(ruleName+" "+str(throttlingFactors[ruleName]))
+		file.write("\n")
+	file.close()
+	print "Throttling factors successfully dumped."
+
 
 
 delayedComments = []
@@ -563,7 +661,7 @@ def makeComment(reply, ruleFunction): # Actually makes both comments and submiss
 		myReply = reply()
 	elif type(reply[1]).__name__ == "Submission":
 		myReply = reply[1].add_comment(reply[0])
-	elif type(reply[1]).__name__ == "Comment": #TODO Is this correct?
+	elif type(reply[1]).__name__ == "Comment":
 		myReply = reply[1].reply(reply[0]) #DAE reply?
 	else:
 		print "WARNING: UNKNOWN REPLY TYPE! EXCEPTION WILL SOON BE RAISED!"
@@ -577,10 +675,10 @@ def makeComment(reply, ruleFunction): # Actually makes both comments and submiss
 
 	if ruleFunction in listOfRules:
 		threadsWeveRepliedTo[listOfRules[ruleFunction]].append(thread)
-		repliesWeveMade[listOfRules[ruleFunction]].append(myReply.id)
+		repliesWeveMade[listOfRules[ruleFunction]].append(thread+"#"+myReply.id)
 	elif ruleFunction in listOfSubmissionRules:
 		threadsWeveRepliedTo[listOfSubmissionRules[ruleFunction]].append(thread)
-		repliesWeveMade[listOfSubmissionRules[ruleFunction]].append(myReply.id)
+		repliesWeveMade[listOfSubmissionRules[ruleFunction]].append(thread+"#"+myReply.id)
 	else:
 		print "WARNING: UNKNOWN RULE TYPE!"
 	print "Successfully commented!", myReply.permalink
@@ -662,10 +760,12 @@ def checkSubreddit(sr):
 			for (rule,implementedRule) in implementedRules:
 				if sr in trackingSubreddits:
 					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
-						implementedRule(comment,body)
+						if random.random() <= throttlingFactors[listOfRules[rule]]:
+							implementedRule(comment,body)
 				elif sr in specialSubreddits:
 					if rule in subredditRestrictions and sr in subredditRestrictions[rule]:
-						implementedRule(comment,body)
+						if random.random() <= throttlingFactors[listOfRules[rule]]:
+							implementedRule(comment,body)
 				else:
 					print "WARNING! THIS LINE SHOULD NEVER BE PRINTED!"
 
@@ -696,10 +796,12 @@ def checkSubmissions(sr):
 			for (rule,implementedRule) in implementedSubmissionRules:
 				if sr in trackingSubreddits:
 					if rule not in subredditRestrictions or sr in subredditRestrictions[rule]:
-						implementedRule(submission,is_self,title,url,selftext)
+						if random.random() <= throttlingFactors[listOfSubmissionRules[rule]]:
+							implementedRule(submission,is_self,title,url,selftext)
 				elif sr in specialSubreddits:
 					if rule in subredditRestrictions and sr in subredditRestrictions[rule]:
-						implementedRule(submission,is_self,title,url,selftext)
+						if random.random() <= throttlingFactors[listOfSubmissionRules[rule]]:
+							implementedRule(submission,is_self,title,url,selftext)
 				else:
 					print "WARNING! THIS LINE SHOULD NEVER BE PRINTED!"
 
@@ -710,15 +812,147 @@ def checkSubmissions(sr):
 
 
 
+def is_comment(url):
+	url_suffix = url[url.index("reddit.com/r/")+13:]
+	slashed = url_suffix.split("/")
+	if len(slashed) >= 5 and slashed[4] != "":
+		return True
+	else:
+		return False
 
-user_agent = "Bravery bot 1.0 by /u/SurvivalOfTheBravest"
+def processFeeder(submission):
+	callbackText = "Mysterious error. Something went seriously wrong if you see this."
+	title = submission.title
+	feederThreadID = submission.id
+	if not submission.is_self:
+		print "Feeder post is not a self-post. Do nothing."
+	elif feederThreadID in feederThreadsWeveAnswered:
+		print "We've already answered this, but for some reason we're looking at it again."
+	elif title[:4] == "http":
+		try:
+
+			url = title
+			try:
+				linked_thing = praw.objects.Submission.from_url(r, url)
+			except:
+				raise Exception("Couldn't parse your title. Please ensure that the title of your post is the URL of a Reddit comment thread or comment permalink, and try again.")
+
+			iscomment = is_comment(url)
+			if iscomment:
+				linked_thing = linked_thing.comments[0]
+
+			selftext = submission.selftext
+			if not selftext:
+				raise Exception("You must enter something for the self-text. Please try again.")
+			else:
+				if iscomment: x = linked_thing.reply(selftext)
+				else: x = linked_thing.add_comment(selftext)
+
+				permalink = x.permalink
+				print "Successfully posted feeder comment:", permalink
+				identifyingToken = x.submission.id + "#" + x.id
+				feederThreadsWeveAnswered.append(feederThreadID)
+				feederRepliesWeveMade.append(identifyingToken)
+				innerText = random.choice([
+					"Here you go, brave sir/madam",
+					"Literally This",
+					"SO BRAVE",
+					"I have LITERALLY posted this",
+				])
+				callbackText = "["+innerText+"]("+permalink+")"
+		except Exception, ex:
+			callbackText = "Error: " + str(ex)
+
+		try:
+			r.login(username="SOTB-bot", password=PASSWORD)
+			y = submission.add_comment(callbackText)
+			print "Posted callback:", y.permalink
+			r.login(username=USERNAME, password=PASSWORD)
+		except Exception, ex:
+			print "Error in posting callback. User's out of luck; there's nothing else we can do.", ex
+		finally:
+			r.login(username=USERNAME, password=PASSWORD)
+	else:
+		print "Not an http self-post."
+
+
+
+
+def splitArrayByElement(array, splitter):
+	output = []
+	current = []
+	for element in array:
+		if element == splitter:
+			output.append(current)
+			current = []
+		else:
+			current.append(element)
+	output.append(current)
+	return output
+
+
+
+
+
+
+user_agent = "Bravery bot 2.0 by /u/VULGARITY_IN_ALLCAPS"
 r = praw.Reddit(user_agent=user_agent)
-r.login(username="SurvivalOfTheBravest", password=PASSWORD)
+r.login(username=USERNAME, password=PASSWORD)
 
 
+
+# Before we start, update the throttlingFactors based on the karma totals,
+# not from the previous day, but from the day before that.
+
+INCREMENT = 0.15
+
+print "Updating throttling factors based on yesterday's karma."
+yesterdaysReplies = repliesWeveMade
+for ruleName in yesterdaysReplies:
+	splitList = splitArrayByElement(yesterdaysReplies[ruleName], "$")
+	if len(splitList) >=2:
+		yesterday = splitList[-2]
+	else:
+		yesterday = []
+	yesterdaysReplies[ruleName] = yesterday
+for ruleName in yesterdaysReplies:
+	print "Assessing", ruleName
+	karma = 0
+	for ids in yesterdaysReplies[ruleName]:
+		arr = ids.split("#")
+		threadID = arr[0]
+		commentID = arr[1]
+		url = "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+commentID
+		commentTree = praw.objects.Submission.from_url(r, url).comments
+		if commentTree:
+			comment = commentTree[0]
+			score = int(comment.score)-1
+			print "A score of", str(score), "at", url
+			karma += score
+		else:
+			print "Comment has been deleted:", url
+		#print "Adding entry:", entry
+	print ruleName, "has gotten", str(karma), "karma."
+	if karma > 0:
+		throttlingFactors[ruleName] = min(1.0, throttlingFactors[ruleName]+INCREMENT)
+	elif karma < 0:
+		throttlingFactors[ruleName] = max(0.0, throttlingFactors[ruleName]-INCREMENT)
+
+print "Done adjusting throttlingFactors."
+dumpThrottlingFactors()
+
+# Add "$" to the end of each repliesWeveMade list to mark the beginning of a new day.
+for ruleName in repliesWeveMade:
+	repliesWeveMade[ruleName].append("$")
+
+
+
+#Get ready...
 implementedRules =           [(rule,implementRule(rule))           for rule in listOfRules]
 implementedSubmissionRules = [(rule,implementSubmissionRule(rule)) for rule in listOfSubmissionRules]
 startTime = time.time()
+
+#Go!
 while True:
 	print "Start loop."
 	delayedComments = nextDelayedComments
@@ -731,13 +965,13 @@ while True:
 		checkSubreddit(sr)
 
 	print "Checking submissions:"
-	# This shouldn't really be like this, but it is because the only rule
-	# checking submissions is restricted to /r/fitness.
-	for sr in ["test"]: #trackingSubreddits:
+	# Commented out because there are no submission tracking rules at the moment.
+	"""
+	for sr in trackingSubreddits:
 		checkSubmissions(sr)
 	for sr in specialSubreddits:
 		checkSubmissions(sr)
-
+	"""
 
 	print "Done with every subreddit."
 
@@ -759,8 +993,31 @@ while True:
 		print "Finished with the delayed comments."
 	else:
 		print "No delayed comments."
+
+
+	print "Done applying rules. Now, check the feeder subreddit."
+
+	feeder = r.get_subreddit("SurvivalOfTheBravest")
+	posts = feeder.get_new(place_holder=feederPlaceHolder,limit=40)
+	postsList = [s for s in posts]
+
+	feederPlaceHolder = postsList[0].id
+	postsList = postsList[:-1]
+	postsList.reverse()
+
+	print "Got " + str(len(postsList)) + " posts from the feeder."
+
+	for post in postsList:
+		processFeeder(post)
+
+	print "Done with feeder."
+	dumpMemory()
+
+
 	print "Sleeping..."
 	time.sleep(60)
+
+	#Are we done for the day?
 	currentTime = time.time()
 	if currentTime - startTime > 85500:
 		print "Timed out after 23:45."
@@ -770,7 +1027,10 @@ while True:
 
 
 
-# END BRAVE ATHEIST PYTHON MAGIC.
+
+################### END DARK ATHEIST PYTHON MAGIC ####################
+######################################################################
+
 
 #YOLO
 #SWAG
