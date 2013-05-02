@@ -503,6 +503,7 @@ specialSubreddits = [
 # subreddits listed next to it. Rules not listed here will be applied to all
 # subreddits in trackingSubreddits.
 subredditRestrictions = {
+	#exampleRule:["subreddit1","subreddit2"],
 }
 
 
