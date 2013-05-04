@@ -390,20 +390,137 @@ def badComments(comment,body):
 
 # This rule brought to you by: /u/RainbowDashIsEpic
 def breadsticks(comment, body):
-    lc = body.lower()
-    if "olive garden" in lc or "breadsticks" in lc or "unlimited breadsticks" in lc or "infinite breadsticks" in lc or "breadstick" in lc:
-        return("/r/unlimitedbreadsticks", comment)
-    return None
+	lc = body.lower()
+	if "olive garden" in lc or "breadsticks" in lc or "unlimited breadsticks" in lc or "infinite breadsticks" in lc or "breadstick" in lc:
+		return("/r/unlimitedbreadsticks", comment)
+	return None
 
 
 # This rule brought to you by: /u/feblehober123
 def penisEnlargementPill(comment,body):
-    lowercaseComment = body.lower()
-    if "reddit enhancement suite" in lowercaseComment:
-        pep = string.join(["penis enlargement pill" for x in re.finditer("reddit enhancement suite",lowercaseComment)]," ")
-        return(pep, comment)
-    return None
+	lowercaseComment = body.lower()
+	if "reddit enhancement suite reddit enhancement suite" in lowercaseComment:
+		pep = string.join(["penis enlargement pill" for x in re.finditer("reddit enhancement suite",lowercaseComment)]," ")
+		return(pep, comment)
+	return None
 
+
+# This rule brought to you by: /u/garrison0
+def Hello(comment, body):
+	lc = body.lower()
+	if "hello spoderman_tim" in lc:
+		author = str(comment.author)
+		if author != USERNAME:
+			return ("Hello " + author, comment)
+	return None
+
+
+# This rule brought to you by: /u/Carl_Bravery_Sagan
+def alot(comment,body):
+	#Posts an alot if someone misuses "a lot"
+	lowercaseComment = body.lower()
+	if " alot " in lowercaseComment:
+		alot_List = [
+			"http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TRIo4br3I/AAAAAAAACv4/Zh7_GcMlRKo/s400/ALOT.png" ,
+			"http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TfVzrqKDI/AAAAAAAACw4/AaBFBmKK3SA/s320/ALOT5.png" ,
+			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=3IZNZKKAYCBSQM&tbnid=jD7qY-3VQK7KJM:&ved=0CAIQjBw&url=http%3A%2F%2Fwww.mentalfloss.com%2Fblogs%2Fwp-content%2Fuploads%2F2011%2F02%2F550_alotAlix.jpg&ei=4N6CUZnUDsbZ0QH9koGQBg&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495" ,
+			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=UUiTb75J-3eGGM&tbnid=YOWw7vUxq1OPaM:&ved=0CAIQjBw&url=http%3A%2F%2Fcdn0.dailydot.com%2Fcache%2F51%2F95%2F51950010b596348543008ad9019a2ae6.jpg&ei=Nd-CUfvgCsXu0gGY3oDgDw&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495" ,
+			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=Fr2XyHospRxfRM&tbnid=shY9C7O7Ho4jKM:&ved=0CAIQjBw&url=http%3A%2F%2Fi.imgur.com%2Fazxmg.png&ei=aN-CUfzIOurq0gHWj4G4BA&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495" ,
+			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=7W3kbrOwyC1znM&tbnid=TTUURCfBrwfQtM:&ved=0CAIQjBw&url=http%3A%2F%2Fi.imgur.com%2F3uwHa.jpg&ei=tN-CUYarHcXu0gGY3oDgDw&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495"
+		]
+		return("[alot](" + random.choice(alot_List) + ")" , comment)
+	return None
+
+# This rule brought to you by: /u/braveathee
+def rwordexplainer(comment,body):
+	lowercaseComment = body.lower()
+	if (" retard" in lowercaseComment):
+		Response = [
+			"**The R-word is EXCLUSIVE** \n \n \"What’s wrong with \"retard\"? I can only tell you what it means to me and people like me when we hear it. It means that the rest of you are excluding us from your group. We are something that is not like you and something that none of you would ever want to be. We are something outside the \"in\" group. We are someone that is not your kind. I want you to know that it hurts to be left out here, alone.\" – *Joseph Franklin Stephens, Special Olympics Virginia athlete and Global Messenger*",
+			"**The R-word fosters LONELINESS** \n \n \"It hurts and scares me when I am the only person with intellectual disabilities on the bus and young people start making \"retard\" jokes or references. Please put yourself on that bus and fill the bus with people who are different from you. Imagine that they start making jokes using a term that describes you. It hurts and it is scary.\" – *Joseph Franklin Stephens, Special Olympics Virginia athlete and Global Messenger*",
+			"**The R-word is OFFENSIVE** \n \n \"The word \"retard\" is considered hate speech because it offends people with intellectual and developmental disabilities as well as the people that care for and support them. It alienates and excludes them. It also emphasizes the negative stereotypes surrounding people with intellectual and developmental disabilities; the common belief that people with intellectual and developmental disabilities should be segregated, hidden away from society, which, in my opinion, is really old fashioned.\" – *Karleigh Jones, Special Olympics New Zealand athlete*"
+		]
+		return(random.choice(Response),comment)
+	return None
+
+
+# Detect if someone appears to be losing an argument,
+# and get ourselves on the winning side.
+# This rule brought to you by: /u/SOTB-human
+def winningArgument(comment, body):
+	lc = body.lower()
+	if len(lc)>50 and ("ad hominem" in lc or "i never said" in lc or "what makes you think" in lc or "personal attack" in lc):
+		try: #Get the parent comment.
+			threadID = comment.submission.id
+			parent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+comment.parent_id).comments[0]
+		except:
+			return None
+		if parent.score > 2: #If the parent is upvoted,
+			try: #Get the grandparent comment.
+				grandparent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+parent.parent_id).comments[0]
+			except:
+				return None
+			#If the grandparent has been downvoted and is by the same person,
+			if grandparent.score < 0 and comment.author == grandparent.author:
+				if random.randint(0,1) == 0: #Reply to the comment with disagreement
+					if "ad hominem" in lc:
+						responses = [
+							">ad hominem\n\nI don't think that means what you think it means.",
+							"A simple expression of disagreement doesn't count as *ad hominem*.",
+							"I think that /u/"+str(parent.author)+" makes a valid point. Why do you think it's an *ad hominem*?",
+						]
+					else:
+						responses = [
+							"someone sounds butthurt",
+							"the butthurt store called, they're running out of /u/"+str(comment.author),
+							"Why are you even arguing about this?",
+							"http://xkcd.com/386/",
+							"The fact that people still think like this makes me sad.",
+							"Dude, seriously. Give it a rest."
+						]
+					return (random.choice(responses), comment)
+				else: #Or, reply to the parent with agreement.
+					responses = [
+						"I can't believe that anyone would be so naive as to disagree with this.",
+						"Haters gonna hate. Don't waste your time arguing with trolls.",
+						"Yours is a much needed voice of reason.",
+						"I wish more people were as reasonable as you.",
+						"Thank you for bringing some sanity to this discussion."
+					]
+					return (random.choice(responses), parent)
+	return None
+
+
+# This rule brought to you by: /u/garrison0
+def leSexual(comment, body):
+	lowercaseComment = body.lower()
+	if "colby" in lowercaseComment:
+		potentialReplies = [
+			"http://i.imgur.com/yZbD4.jpg",
+			"http://i.imgur.com/Docb6.jpg",
+			"*shrug*\n Every thread."
+			"[For all those wondering..](http://www.reddit.com/r/AskReddit/comments/zw3j9/i_am_the_fatherredditor_who_lost_his_family_after/)",
+			"Keep your hairbrush away from your kids.",
+			"http://i.imgur.com/MYKti.png",
+			"I wonder what happened to that guy..",
+			"Does anyone know what happened to that guy?",
+			"Poor Colby."
+		]
+		return(random.choice(potentialReplies), comment)
+	if len(body) < 200 and ("broken arms" in lowercaseComment or "arms broken" in lowercaseComment):
+		potentialReplies = [
+			"Every fucking thread.",
+			"Was anyone else on Reddit a year ago?",
+			"/r/incest is that way, mate.",
+			"Great, just the mental image I needed today.",
+			"Colby, incest, mothers, broken arms, etc.",
+			"You know what they say, your mother is always there for you.",
+			"Thanks, mom.",
+			"Well, I liked the sisterfucker better.",
+			"[For those who are wondering..](http://www.reddit.com/r/IAmA/comments/nmmjr/iama_man_who_had_a_sexual_relationship_with_his/)"
+		]
+		return(random.choice(potentialReplies), comment)
+	return None
 
 
 
@@ -425,12 +542,81 @@ def n_noHomo(submission, is_self, title, url, selftext):
 			return None
 
 
-## ROUND 1 RULES ##
+## ROUND 2 RULES ##
 
 
-#None yet.
+# This rule brought to you by: /u/feblehober123
+def selfPenisEnlargementPill(submission, is_self, title, url, selftext):
+	lowercaseText = selftext.lower()
+	if is_self and "reddit enhancement suite reddit enhancement suite" in lowercaseText:
+		pep = string.join(["penis enlargement pill" for x in re.finditer("reddit enhancement suite",lowercaseText)]," ")
+		#I dont know how to do this part, so ill just leave the basic idea
+		if str(submission.subreddit) == "Braveryjerk":
+			pep = "#####" + pep
+			#I am too used to BASIC. The point of this is to make it large, bold text, like below.
+		return(pep, submission)
+	return None
 
 
+#replies to title tropes.
+# This rule brought to you by: /u/garrison0
+def bemygirlfriend(submission, is_self, title, url, selftext):
+
+	lowerT = title.lower() # will this work?
+
+	#also, restrict this to /r/gonewild, I don't want to go through your code M8.
+
+	if "shy" in lowerT or "nervous" in lowerT or "afraid" in lowerT:
+		potential = ["Aww, don't be nervous. You're beautiful!",
+						"Shy girls are cute! :)",
+						"U-uh.. give me 10 minutes.",
+						"You're absolutely gorgeous :)",
+						"Great body no need to be shy or nervous :P. Would love to see more.",
+						"Can I get more, please? You're hot as fuck. :3",
+						"oh my god, you're stunning.",
+						"What are you nervous about? You're beautiful!",
+						"Wow, you are CUTE. Where can we hook up? :D"
+						"I want to take you out to dinner, and then go see a romantic movie afterwards. I realize this isn't [1] /r/gentlemanboners but god damnit, you're actually beautiful. Not hot, not pretty, and not cute. Beautiful."]
+		return (random.choice(potential), submission)
+
+	if "at work" in lowerT or "[f]rom work" in lowerT or "(f)rom work" in lowerT or "from work" in lowerT:
+		potential = ["Wow, give me 10 minutes and I'll get back to you.",
+						"I hate it when that happens... good thing you took pictures ;)",
+						"You're *so* damn hot. Jeez.",
+						"I'll bend you over your desk, if you want. :)",
+						"I'll fuck you if you insist. ;)",
+						"I can remedy this.",
+						"I like your dangerous side. :D",
+						"Would you be okay if I brought you the workplace delivery of my cock? ;)",
+						"You have an incredibly gorgeous body.",
+						"Hot.as.hell. Are you a secretary by any chance?",
+						"I want to take you out to dinner, and then go see a romantic movie afterwards. I realize this isn't [1] /r/gentlemanboners but god damnit, you're actually beautiful. Not hot, not pretty, and not cute. Beautiful."]
+		return (random.choice(potential), submission)
+	return None
+
+
+# If a submission is a self post in /r/BodyAcceptance(Only track this rule in /r/BodyAcceptance),
+# give them the generic positive feedback they want. (Oh, they want it)
+# This rule brought to you by: /u/1cerazor
+def myFeels(submission, is_self, title, url, selftext):
+	if is_self:
+		# Only do this 10% of the time, so it's not so obviously a bot(/r/BodyAcceptance only gets 1-2 self posts per day, so this will not trigger very often)
+		if random.randint(0,10) == 5:
+			# I tried to make this list of responses as long as possible so people won't catch on quickly.
+			responses = [
+				"Just remember, you're perfect just the way you are.",
+				"Everyone is beautiful, no matter what society might say.",
+				"Why do people have to be so mean to others? What ever happened to just *accepting* each other?",
+				"Just a message to everyone: Remember to love yourself all the time. It solves so many problems in life.",
+				"Some people are just born different, seriously fuck what rude people say.",
+				"We all have issues with our bodies, when will people just accept that and stop being assholes to each other all the time?",
+				"I just want to remind everyone to love yourself :)",
+				"You are beautiful. Seriously, don't ever feel shitty about the way you look ever again.",
+				"Just love yourself. Everything else will fall into place I swear. :)",
+				"Don't ever let anyone put you down - even yourself!",
+			]
+			return(random.choice(responses), comment)
+	return None
 
 
 ######################## END BRAVERY RULES. ##########################
@@ -468,11 +654,19 @@ listOfRules = { #Rules to apply to comments.
 	badComments:"badComments",					#ROUND 2
 	breadsticks:"breadsticks",
 	penisEnlargementPill:"penisEnlargementPill",
+	Hello:"Hello",
+	alot:"alot",
+	rwordexplainer:"rwordexplainer",
+	winningArgument:"winningArgument",
+	leSexual:"leSexual",
 }
 
 
 listOfSubmissionRules = { #Rules to apply to submissions.
 	#n_noHomo:"n_noHomo", 						#culled from Round 1
+	selfPenisEnlargementPill:"selfPenisEnlargementPill", #ROUND 2
+	bemygirlfriend:"bemygirlfriend",
+	myFeels:"myFeels",
 }
 
 # List of subreddits to check all rules in.
@@ -497,13 +691,16 @@ trackingSubreddits = [
 # These subreddits will not be checked by any rules EXCEPT those which explicitly
 # say so in subredditRestrictions.
 specialSubreddits = [
+	"gonewild",
+	"BodyAcceptance",
 ]
 
 # Every rule listed here will be applied only to comments or submissions in the
 # subreddits listed next to it. Rules not listed here will be applied to all
 # subreddits in trackingSubreddits.
 subredditRestrictions = {
-	#exampleRule:["subreddit1","subreddit2"],
+	bemygirlfriend:["gonewild"],
+	myFeels:["BodyAcceptance"],
 }
 
 
@@ -573,8 +770,8 @@ file.close()
 for rule in listOfRules:
 	ruleName = listOfRules[rule]
 	if ruleName not in throttlingFactors: throttlingFactors[ruleName] = 1
-for ruleName in listOfSubmissionRules:
-	ruleName = listOfRules[rule]
+for rule in listOfSubmissionRules:
+	ruleName = listOfSubmissionRules[rule]
 	if ruleName not in throttlingFactors: throttlingFactors[ruleName] = 1
 
 feederThreadsWeveAnswered = []
@@ -905,21 +1102,17 @@ r.login(username=USERNAME, password=PASSWORD)
 # Before we start, update the throttlingFactors based on the karma totals,
 # not from the previous day, but from the day before that.
 
-INCREMENT = 0.15
+INCREMENT = 0.2
 
 print "Updating throttling factors based on yesterday's karma."
-yesterdaysReplies = repliesWeveMade
-for ruleName in yesterdaysReplies:
-	splitList = splitArrayByElement(yesterdaysReplies[ruleName], "$")
+for ruleName in repliesWeveMade:
+	splitList = splitArrayByElement(repliesWeveMade[ruleName], "$")
 	if len(splitList) >=2:
 		yesterday = splitList[-2]
 	else:
 		yesterday = []
-	yesterdaysReplies[ruleName] = yesterday
-for ruleName in yesterdaysReplies:
-	print "Assessing", ruleName
 	karma = 0
-	for ids in yesterdaysReplies[ruleName]:
+	for ids in yesterday:
 		arr = ids.split("#")
 		threadID = arr[0]
 		commentID = arr[1]
@@ -945,7 +1138,7 @@ dumpThrottlingFactors()
 # Add "$" to the end of each repliesWeveMade list to mark the beginning of a new day.
 for ruleName in repliesWeveMade:
 	repliesWeveMade[ruleName].append("$")
-
+dumpMemory()
 
 
 #Get ready...
@@ -956,6 +1149,26 @@ startTime = time.time()
 #Go!
 while True:
 	print "Start loop."
+
+	feeder = r.get_subreddit("SurvivalOfTheBravest")
+	posts = feeder.get_new(place_holder=feederPlaceHolder,limit=40)
+	postsList = [s for s in posts]
+
+	feederPlaceHolder = postsList[0].id
+	postsList = postsList[:-1]
+	postsList.reverse()
+
+	print "Got " + str(len(postsList)) + " posts from the feeder."
+
+	for post in postsList:
+		processFeeder(post)
+
+	print "Done with feeder."
+	dumpMemory()
+
+
+
+
 	delayedComments = nextDelayedComments
 	nextDelayedComments = []
 
@@ -966,13 +1179,10 @@ while True:
 		checkSubreddit(sr)
 
 	print "Checking submissions:"
-	# Commented out because there are no submission tracking rules at the moment.
-	"""
 	for sr in trackingSubreddits:
 		checkSubmissions(sr)
 	for sr in specialSubreddits:
 		checkSubmissions(sr)
-	"""
 
 	print "Done with every subreddit."
 
@@ -996,23 +1206,8 @@ while True:
 		print "No delayed comments."
 
 
-	print "Done applying rules. Now, check the feeder subreddit."
+	print "Done applying rules."
 
-	feeder = r.get_subreddit("SurvivalOfTheBravest")
-	posts = feeder.get_new(place_holder=feederPlaceHolder,limit=40)
-	postsList = [s for s in posts]
-
-	feederPlaceHolder = postsList[0].id
-	postsList = postsList[:-1]
-	postsList.reverse()
-
-	print "Got " + str(len(postsList)) + " posts from the feeder."
-
-	for post in postsList:
-		processFeeder(post)
-
-	print "Done with feeder."
-	dumpMemory()
 
 
 	print "Sleeping..."
