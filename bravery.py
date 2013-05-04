@@ -575,7 +575,7 @@ def bemygirlfriend(submission, is_self, title, url, selftext):
 						"Can I get more, please? You're hot as fuck. :3",
 						"oh my god, you're stunning.",
 						"What are you nervous about? You're beautiful!",
-						"Wow, you are CUTE. Where can we hook up? :D"
+						"Wow, you are CUTE. Where can we hook up? :D",
 						"I want to take you out to dinner, and then go see a romantic movie afterwards. I realize this isn't [1] /r/gentlemanboners but god damnit, you're actually beautiful. Not hot, not pretty, and not cute. Beautiful."]
 		return (random.choice(potential), submission)
 
