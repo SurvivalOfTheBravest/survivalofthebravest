@@ -524,6 +524,63 @@ def leSexual(comment, body):
 
 
 
+
+
+# [Le]terally misandry
+# This rule brought to you by: /u/braveathee
+def ilovemales(comment, body):
+	if "As a male" in body:
+		author = str(comment.author)
+		replies = [
+			">As a male \n \n Has anybody checked if " + author + " had posted anything in /r/gonewild ?",
+			">As a male \n \n I have checked, nothing in /r/gonewild. :(",
+			">As a male \n \n I have found nothing in /r/gonewild. :(",
+			">As a male \n \n *Looks at " + author + "'s history* \n \n ... \n \n Nothing in /r/ladyboners. :(",
+			">As a male \n \n *Checks " + author + "'s history* \n \n ... \n \n Nothing in /r/gonewild. :-(",
+			">As a male \n \n *Looks at " + author + "'s history on redditgraphs* \n \n ... \n \n No pics in /r/LadyBoners or /r/gonewild. :(",
+			">As a male \n \n *Searches " + author + "'s history* \n \n ... \n \n No posts in /r/ladyboners. :-(",
+		]
+		return (random.choice(replies), comment)
+	return None
+
+
+# Helper function for the rule below.
+# Anyone can use this.
+def isReplyToUs(comment):
+	parentID = comment.parent_id[3:]
+	#print "Searching for:", parentID
+	for rule in listOfRules:
+		listOfReplies = repliesWeveMade[listOfRules[rule]]
+		#print listOfReplies
+		for replyCode in listOfReplies:
+			if "#"+parentID in replyCode:
+				#print "Found it"
+				return True
+	for rule in listOfSubmissionRules:
+		listOfReplies = repliesWeveMade[listOfSubmissionRules[rule]]
+		#print listOfReplies
+		for replyCode in listOfReplies:
+			if "#"+parentID in replyCode:
+				#print "Found it"
+				return True
+	#print "Didn't find it"
+	return False
+
+# If some unbrave faget responds to our brave bot complaining
+# that one of our brave comments were not vulgar or in allcaps,
+# then tell them to fuck themselves.
+# This rule brought to you by: /u/1cerazor
+def fuckYou(comment, body):
+	lc = body.lower()
+	if (("vulgar" in lc or "caps" in lc) and USERNAME.lower() not in lc) or "novelty account" in lc:
+		if isReplyToUs(comment):
+			return("FUCK YOU", comment)
+	return None
+
+
+
+
+
 #### SECTION 2: RULES TO APPLY TO SUBMISSIONS
 
 
@@ -615,8 +672,43 @@ def myFeels(submission, is_self, title, url, selftext):
 				"Just love yourself. Everything else will fall into place I swear. :)",
 				"Don't ever let anyone put you down - even yourself!",
 			]
-			return(random.choice(responses), comment)
+			return(random.choice(responses), submission)
 	return None
+
+
+# A program that answers simple questions with a Google search.
+# This rule brought to you by: /u/braveathee
+def searchongoogle(submission, is_self, title, url, selftext):
+	shouldbeavoided = [
+		"he",
+		"it",
+		"she",
+		"you",
+		"this",
+		"that",
+		"they",
+		"those",
+		"these",
+		".",
+		",",
+	]
+	if is_self and selftext == "" and title[-1] == '?':
+		for word in shouldbeavoided:
+			if word in title:
+				return None
+		replies = [
+			"Have you tried to [google your question](http://google.com/#q=" + title + ") ?",
+			"Have you [googled your question](http://google.com/#q=" + title + ") before asking ?",
+			"You know that [Google exists](http://google.com/#q=" + title + "), right ?",
+			"Maybe this [Google search](http://google.com/#q=" + title + ") will answer your question.",
+			"I hope that this [Google search](http://google.com/#q=" + title + ") will answer your question.",
+			"I have made [a Google search for your question](http://google.com/#q=" + title + "). I hope that its results will be helpful to you.",
+			"[A Google search for your question.](http://google.com/#q=" + title + ") Maybe you will find a good answer there.",
+		]
+
+		return(random.choice(replies),submission)
+	return None
+
 
 
 ######################## END BRAVERY RULES. ##########################
@@ -659,6 +751,8 @@ listOfRules = { #Rules to apply to comments.
 	rwordexplainer:"rwordexplainer",
 	winningArgument:"winningArgument",
 	leSexual:"leSexual",
+	ilovemales:"ilovemales",
+	fuckYou:"fuckYou",
 }
 
 
@@ -667,6 +761,7 @@ listOfSubmissionRules = { #Rules to apply to submissions.
 	selfPenisEnlargementPill:"selfPenisEnlargementPill", #ROUND 2
 	bemygirlfriend:"bemygirlfriend",
 	myFeels:"myFeels",
+	searchongoogle:"searchongoogle",
 }
 
 # List of subreddits to check all rules in.
@@ -1106,6 +1201,7 @@ INCREMENT = 0.2
 
 print "Updating throttling factors based on yesterday's karma."
 for ruleName in repliesWeveMade:
+	print "Assessing", ruleName
 	splitList = splitArrayByElement(repliesWeveMade[ruleName], "$")
 	if len(splitList) >=2:
 		yesterday = splitList[-2]
@@ -1117,14 +1213,17 @@ for ruleName in repliesWeveMade:
 		threadID = arr[0]
 		commentID = arr[1]
 		url = "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+commentID
-		commentTree = praw.objects.Submission.from_url(r, url).comments
-		if commentTree:
-			comment = commentTree[0]
-			score = int(comment.score)-1
-			print "A score of", str(score), "at", url
-			karma += score
-		else:
-			print "Comment has been deleted:", url
+		try:
+			commentTree = praw.objects.Submission.from_url(r, url).comments
+			if commentTree:
+				comment = commentTree[0]
+				score = int(comment.score)-1
+				print "A score of", str(score), "at", url
+				karma += score
+			else:
+				print "Comment has been deleted:", url
+		except Exception, ex:
+			print "Exception in getting comment. Assume 0.", ex
 		#print "Adding entry:", entry
 	print ruleName, "has gotten", str(karma), "karma."
 	if karma > 0:
@@ -1150,20 +1249,23 @@ startTime = time.time()
 while True:
 	print "Start loop."
 
-	feeder = r.get_subreddit("SurvivalOfTheBravest")
-	posts = feeder.get_new(place_holder=feederPlaceHolder,limit=40)
-	postsList = [s for s in posts]
+	try:
+		feeder = r.get_subreddit("SurvivalOfTheBravest")
+		posts = feeder.get_new(place_holder=feederPlaceHolder,limit=40)
+		postsList = [s for s in posts]
 
-	feederPlaceHolder = postsList[0].id
-	postsList = postsList[:-1]
-	postsList.reverse()
+		feederPlaceHolder = postsList[0].id
+		postsList = postsList[:-1]
+		postsList.reverse()
 
-	print "Got " + str(len(postsList)) + " posts from the feeder."
+		print "Got " + str(len(postsList)) + " posts from the feeder."
 
-	for post in postsList:
-		processFeeder(post)
+		for post in postsList:
+			processFeeder(post)
 
-	print "Done with feeder."
+		print "Done with feeder."
+	except Exception, ex:
+		print "An exception occurred while processing the feeder:", ex
 	dumpMemory()
 
 
