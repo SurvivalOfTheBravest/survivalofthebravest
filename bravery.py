@@ -434,7 +434,7 @@ def alot(comment,body):
 # This rule brought to you by: /u/braveathee
 def rwordexplainer(comment,body):
 	lowercaseComment = body.lower()
-	if (" retard" in lowercaseComment):
+	if (" retard " in lowercaseComment):
 		Response = [
 			"**The R-word is EXCLUSIVE** \n \n \"What’s wrong with \"retard\"? I can only tell you what it means to me and people like me when we hear it. It means that the rest of you are excluding us from your group. We are something that is not like you and something that none of you would ever want to be. We are something outside the \"in\" group. We are someone that is not your kind. I want you to know that it hurts to be left out here, alone.\" – *Joseph Franklin Stephens, Special Olympics Virginia athlete and Global Messenger*",
 			"**The R-word fosters LONELINESS** \n \n \"It hurts and scares me when I am the only person with intellectual disabilities on the bus and young people start making \"retard\" jokes or references. Please put yourself on that bus and fill the bus with people who are different from you. Imagine that they start making jokes using a term that describes you. It hurts and it is scary.\" – *Joseph Franklin Stephens, Special Olympics Virginia athlete and Global Messenger*",
@@ -452,12 +452,12 @@ def winningArgument(comment, body):
 	if len(lc)>50 and ("ad hominem" in lc or "i never said" in lc or "what makes you think" in lc or "personal attack" in lc):
 		try: #Get the parent comment.
 			threadID = comment.submission.id
-			parent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+comment.parent_id).comments[0]
+			parent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+comment.parent_id[3:]).comments[0]
 		except:
 			return None
 		if parent.score > 2: #If the parent is upvoted,
 			try: #Get the grandparent comment.
-				grandparent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+parent.parent_id).comments[0]
+				grandparent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+parent.parent_id[3:]).comments[0]
 			except:
 				return None
 			#If the grandparent has been downvoted and is by the same person,
