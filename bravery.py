@@ -578,6 +578,14 @@ def fuckYou(comment, body):
 	return None
 
 
+# fuck any fundie who says we are are a bot
+# This rule brought to you by /u/xvvhiteboy
+def botLogic(comment, body):
+	lc = body.lower()
+	if "bot" in lower or "bot logic" in lower or "automated" in lower:
+		if isReplyToUs(comment):
+			return("If I was a bot how would I be replying to this comment?", comment)
+	return None
 
 
 
@@ -753,6 +761,8 @@ listOfRules = { #Rules to apply to comments.
 	leSexual:"leSexual",
 	ilovemales:"ilovemales",
 	fuckYou:"fuckYou",
+	botLogic:"botLogic",
+	
 }
 
 
