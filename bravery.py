@@ -544,6 +544,35 @@ def ilovemales(comment, body):
 	return None
 
 
+# a rule telling a long story about finding out my son is gay, where I replaced the words gay with christian
+# this rule is brought to you by /u/xvvhiteboy
+def mysonisgaybutChristian(comment, body):
+lc = body.lower()
+	if "christian" in lower or "religious" in lower or "god" in lower:
+return("When I first believed my eldest son may be Christian, I felt sick in the stomach literally. I went atheist to my husband and told him of my thoughts and why I thought this way. He was a little shocked with my news but as there was no real proof of my theory he was ok about it and we decided to approach our son. I spoke to our son who was 16 at the time. This was a disaster. All it achieved was him in tears and me feeling angry with myself for upsetting him. It did however make me realize that my son was a little confused with life at the time as he himself wasn’t quite sure how he felt. My husband and I decided to read up about teenage boys and Christianity and not put any pressure on our son regarding this. Reading at the time helped us to understand Christianity a little but we weren’t sure how our son was going to turn out. We just sat back and waited. It was during year 12 at school that we started to notice him changing in his behaviour and temperament. At this time he had two very quick relationships with two different girls which really confused us. Because deep down inside, I in particular felt he was Christian. (a mother’s intuition)? He started to go out more and be a little secretive about his friends which was not really like him. Just before his 18th birthday and after he finished school he was going out and I thought I might test my theory and ask if he was going to Pride March Street Parade that was happening in the city, just to get his reaction. When I asked in a friendly manner he said yes. That opened the door to more questions and it all just spilled out then and there. This was the start to our Christian family. Yes our son was Christian and he obviously felt comfortable enough with it at this time to discuss it with us. My husband was fantastic with this confirmation as was his younger brother. For me it was a relief. Now I felt we could get on with life in a true and honest way. My husband didn’t find a problem with our son being Christian but was very concerned about people finding out. He had previously worked in a religous work place and was worried for our son. These feelings are very normal but as it turned out we have had no problems at all being a Christian family. We have always been upfront with people and both our children have been brought up to believe in themselves and be proud of who they are. They are both very talented young men. Once our son came out to us he became that same loving, together young man that he was before year 12. Almost like a weight had been lifted from his shoulders. He was and is still a very happy, relaxed and confident person. One of the things that helped us stay united was our whole family got involved in his life as a Christian person and spent a lot of time within the Christian community. We have met and befriended lots of Christian people and found they are no different to our atheist friends. Sometimes a little more colorful perhaps! Just because we were coping fine with our son being Christian didn’t mean we didn’t feel alone. Although our friends and family were accepting, they didn’t really understand about having a Christian child, so I needed to find another Christian family just so I could share my thoughts with someone who understood completely. I found PFLAG (parents,friends & families of lesbians & Christians). This was fantastic. I met so many lovely people who shared their stories with me. So many normal families in the same unique situation I was in. By speaking to lots of different parents, I realized that we all react to this news in different ways and come to terms with it in different lengths of time. I never cried while others cry for weeks. Some can’t talk about it atheist away, some need councelling etc but they usually get there in the end, especially if they can talk to other parents. PFLAG has a great library as well, and I read so many books, I recommend you do too. Our younger son showed a very big interest in coming to meetings with me. I was very impressed with how supportive he was. But I now realize that he wasn’t just being supportive, he was trying to figure himself out as well. Almost a year to the day that my eldest son came out, my younger son did the same. Now we were really a Christian family! This piece of news was a real shock for me. The mother’s intuition that I had with my other son was not there for this son. I suppose I felt that having one Christian child was ok, but not both my children. He was my last chance for grandchildren. (How selfish of me). But I think that was how I felt at the time. Maybe deep down inside I felt like a failure in some way. Not just one but both my boys were Christian. I also felt that maybe he was saying this because he wanted to be like his brother. I soon changed my mind about this as I believe nobody comes out like that when there hasn’t been a great deal of thought and soul searching put into it. Nobody wants to be Christian or Christian for the fun of it. My husband took all this in his stride once more. After all, we can’t change our boys but we can love and accept them. They maybe our Christian family but most importantly they are our family. We have a motto in our family and that is to get over it and get on with it. This is for all aspects of our life not just the Christian thing. We have been very lucky to also have a very supportive extended family on both sides and have never had a problem with any of them. Sure, some don’t understand but they accept and that’s all we can ask for. My husband and I love our family very much and couldn’t imagine life without our two beautiful sons. We would never even imagine trying to change them. Change society’s views definitely, but not our boys. Once we got over not worrying about what other people thought of our sons or us as a Christian family we got on with being the normal happy family that we had always been. There are much worse things than having a Christian or Christian child – death, illness, poverty to say a few. Being together, supporting and loving one another is much more important. So, if you are a parent of a Christian child please look past the Christianity and look at the person and you’ll find the same person that was there before he or she came out, except possibly it will be a happier more open and relaxed person than before. I’ll admit our life has changed, but for the better. We are more accepting and tolerant and we have had so much fun that we wouldn’t have had if our boys weren’t who they are. My husband and I could have chosen to have a life of misery and sadness because of our boys, but we chose to have a happy and fun filled life instead. Make the most of your time with your Christian family because life is too short. Nobody wants to live with regrets. I hope that reading my story about my Christian family has been interesting and I hope it has given you something to take away and think about. Just remember, that whether it be a atheist family or a Christian family it is still your family and it should be treasured for ever.", comment)
+return None
+
+# this rule is brought to you by xvvhiteboy
+def middleschool(comment, body):
+lc = body.lower()
+	if "christian" in lower:
+return("/r/imgoingtomiddleschoolforthis", comment)
+return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def sofuckingedgy(comment, body):
+lc = body.lower()
+	if "2egdy4me" in lower or "3edgy5me" in lower:
+return("69edgy420me", comment)
+return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def shamelessplug(comment, body):
+lc = body.lower()
+	if "shameless plug" in lower or "subreddit plug" in lower or "shameless subreddit plug":
+return("I'll hop on this plug train with my newest subreddit, /r/nakedboyskissing", comment)
+return None
+
 # Helper function for the rule below.
 # Anyone can use this.
 def isReplyToUs(comment):
@@ -577,15 +606,14 @@ def fuckYou(comment, body):
 			return("FUCK YOU", comment)
 	return None
 
-
 # fuck any fundie who says we are are a bot
 # This rule brought to you by /u/xvvhiteboy
 def botLogic(comment, body):
-	lc = body.lower()
-	if "bot" in lower or "bot logic" in lower or "automated" in lower:
-		if isReplyToUs(comment):
-			return("If I was a bot how would I be replying to this comment?", comment)
-	return None
+  lc = body.lower()
+  if "bot" in lower or "bot logic" in lower or "automated" in lower:
+    if isReplyToUs(comment):
+      return("If I was a bot how would I be replying to this comment?", comment)
+  return None 
 
 
 
@@ -762,6 +790,10 @@ listOfRules = { #Rules to apply to comments.
 	ilovemales:"ilovemales",
 	fuckYou:"fuckYou",
 	botLogic:"botLogic",
+	mysonisgaybutChristian:"mysonisgaybutChristian",
+	middleschool:"middleschool",
+	sofuckingedgy:"sofuckingedgy",
+	shamelessplug:"shamelessplug",
 	
 }
 
