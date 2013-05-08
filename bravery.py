@@ -595,7 +595,7 @@ def mysonisgaybutChristian(comment, body):
 # this rule is brought to you by /u/xvvhiteboy
 def middleschool(comment, body):
 	lc = body.lower()
-	if "christian" in lc:
+	if "r/imgoingtohellforthis" in lc:
 		return("/r/imgoingtomiddleschoolforthis", comment)
 	return None
 
@@ -678,6 +678,18 @@ def republicansAreEvil(comment, body):
 			return (random.choice(responses), comment)
 	return None
 
+
+#Is Leaking Rule
+#For those annoying "circlejerk is leaking" posts
+def leaking(comment,body):
+	lower = body.lower()
+	if "is leaking" in lower:
+		responses = [ "Grab a mop!",
+					  "Put a cork in it!",
+					  "Get a tampon!",
+					  "Call a plumber!"]
+		return (random.choice(responses), comment)
+	return None
 
 
 #### SECTION 2: RULES TO APPLY TO SUBMISSIONS
@@ -854,13 +866,14 @@ listOfRules = { #Rules to apply to comments.
 	fuckYou:"fuckYou",
 	botLogic:"botLogic",
 	#mysonisgaybutChristian:"mysonisgaybutChristian",
-	#middleschool:"middleschool",
+	middleschool:"middleschool",
 	sofuckingedgy:"sofuckingedgy",
 	shamelessplug:"shamelessplug",
 	Reddit:"Reddit",
 	leXKCD:"leXKCD",
 	gnu:"gnu",
 	republicansAreEvil:"republicansAreEvil",
+	leaking:"leaking",
 }
 
 
