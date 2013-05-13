@@ -423,10 +423,10 @@ def alot(comment,body):
 		alot_List = [
 			"http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TRIo4br3I/AAAAAAAACv4/Zh7_GcMlRKo/s400/ALOT.png" ,
 			"http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TfVzrqKDI/AAAAAAAACw4/AaBFBmKK3SA/s320/ALOT5.png" ,
-			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=3IZNZKKAYCBSQM&tbnid=jD7qY-3VQK7KJM:&ved=0CAIQjBw&url=http%3A%2F%2Fwww.mentalfloss.com%2Fblogs%2Fwp-content%2Fuploads%2F2011%2F02%2F550_alotAlix.jpg&ei=4N6CUZnUDsbZ0QH9koGQBg&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495" ,
-			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=UUiTb75J-3eGGM&tbnid=YOWw7vUxq1OPaM:&ved=0CAIQjBw&url=http%3A%2F%2Fcdn0.dailydot.com%2Fcache%2F51%2F95%2F51950010b596348543008ad9019a2ae6.jpg&ei=Nd-CUfvgCsXu0gGY3oDgDw&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495" ,
-			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=Fr2XyHospRxfRM&tbnid=shY9C7O7Ho4jKM:&ved=0CAIQjBw&url=http%3A%2F%2Fi.imgur.com%2Fazxmg.png&ei=aN-CUfzIOurq0gHWj4G4BA&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495" ,
-			"https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&docid=7W3kbrOwyC1znM&tbnid=TTUURCfBrwfQtM:&ved=0CAIQjBw&url=http%3A%2F%2Fi.imgur.com%2F3uwHa.jpg&ei=tN-CUYarHcXu0gGY3oDgDw&psig=AFQjCNGuMZowC65L_nMavxVr4UnMeKqDdA&ust=1367617147799495"
+			"http://www.mentalfloss.com/sites/default/legacy/blogs/wp-content/uploads/2011/02/550_alotAlix.jpg" ,
+			"http://cdn0.dailydot.com/cache/51/95/51950010b596348543008ad9019a2ae6.jpg",
+			"http://i.imgur.com/azxmg.png",
+			"http://i.imgur.com/3uwHa.jpg"
 		]
 		return("[alot](" + random.choice(alot_List) + ")" , comment)
 	return None
@@ -636,7 +636,7 @@ def leXKCD(comment, body):
 	if random.randint(0,5) != 0: return None #links to the "ass" xkcd
 	lowercaseComment = body.lower()
 	if "-ass " in lowercaseComment or " ass-" in lowercaseComment:
-		relevantReply = "[Relevant XKCD](http://imgs.xkcd.com/comics/hyphen.jpg)"
+		relevantReply = "Reminds me of this [XKCD](http://imgs.xkcd.com/comics/hyphen.jpg)"
 		return(relevantReply, comment)
 	return None
 
@@ -681,6 +681,7 @@ def republicansAreEvil(comment, body):
 
 #Is Leaking Rule
 #For those annoying "circlejerk is leaking" posts
+# This rule brought to you by: /u/CoughSyrup
 def leaking(comment,body):
 	lower = body.lower()
 	if "is leaking" in lower:
@@ -689,6 +690,34 @@ def leaking(comment,body):
 					  "Get a tampon!",
 					  "Call a plumber!"]
 		return (random.choice(responses), comment)
+	return None
+
+
+# This rule brought to you by: /u/CoughSyrup
+def notFunny(comment,body):
+	#not funny rule
+	#for when people bitch about /r/funny posts that aren't funny
+	#I can't figure out how to put this on the subredditRestrictions list but SOTB-human will hopefully do it for me
+	#pl0x SOTB-human
+	lower = body.lower()
+	if ("not funny" in lower or "isn't funny" in lower or "isnt funny" in lower or "how is this funny" in lower):
+		return ("It's not like this is /r/funny or anything.",comment)
+	return None
+
+
+# This rule brought to you by: /u/Eugle
+def sweeden(comment,body):
+	lowercaseComment = body.lower()
+	if "sweden" in lowercaseComment:
+		return("DAE S[weed]en is [le]terally utopia?",comment)
+	return None
+
+
+# This rule brought to you by: /u/Eugle
+def gabe(comment,body):
+	lowercaseComment = body.lower()
+	if "gaben" in lowercaseComment or "valve" in lowercaseComment:
+		return("I just love Gaben, seriously. He's a fucking hero. Without him, and the team at valve, I would have no hope in PC gaming.\n\nedit: yes, I know there are other great developers, but I'm not only talking about the games! I'm talking about Valve and everything they do. And there is just something special about Gabe, I mean I have never met him, never got to know him in person, but for me he is just amazing.",comment)
 	return None
 
 
@@ -850,7 +879,7 @@ listOfRules = { #Rules to apply to comments.
 	atheismIsShit:"atheismIsShit",
 	noWords:"noWords",
 	thats_racist:"thats_racist",
-	hello_timmie:"hello_timmie",
+	#hello_timmie:"hello_timmie",
 	randomPasta:"randomPasta",
 	requestBravery:"requestBravery",
 
@@ -874,6 +903,9 @@ listOfRules = { #Rules to apply to comments.
 	gnu:"gnu",
 	republicansAreEvil:"republicansAreEvil",
 	leaking:"leaking",
+	notFunny:"notFunny",
+	sweeden:"sweeden",
+	gabe:"gabe"
 }
 
 
@@ -889,18 +921,18 @@ listOfSubmissionRules = { #Rules to apply to submissions.
 trackingSubreddits = [
 	"test",
 	"braveryjerk",
-	"circlejerk",
+	#"circlejerk",
 	"pics",
 	"funny",
 	"politics",
 	"gaming",
 	"askreddit",
 	"videos",
-	"iama",
+	#"iama",
 	"wtf",
 	"aww",
 	"atheism",
-	"AdviceAnimals",
+	#"AdviceAnimals",
 	"todayilearned",
 ]
 
@@ -917,6 +949,7 @@ specialSubreddits = [
 subredditRestrictions = {
 	bemygirlfriend:["gonewild"],
 	myFeels:["BodyAcceptance"],
+	notFunny:["funny"],
 }
 
 
