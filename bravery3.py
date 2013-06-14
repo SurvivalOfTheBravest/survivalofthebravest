@@ -30,7 +30,7 @@ USERNAME = "TEST_ACCT_PLZ_IGNORE"
 # but doesn't mention r/onetruegod.
 # This rule brought to you by: /u/SurvivalOfTheBravest
 def oneTrueGod(comment,body):
-  lowercaseComment = body.lower()
+	lowercaseComment = body.lower()
 	if "nicolas cage" in lowercaseComment or "nick cage" in lowercaseComment:
 		if "r/onetruegod" not in lowercaseComment:
 			return ("/r/onetruegod", comment)
@@ -239,27 +239,6 @@ def ilovemales(comment, body):
 
 
 
-
-# Helper function for the rule below.
-# Anyone can use this.
-def isReplyToUs(comment):
-	parentID = comment.parent_id[3:]
-	def searchFor(rule):
-		listOfReplies = repliesWeveMade[nameOfRule(rule)]
-		for replyCode in listOfReplies:
-			if "#"+parentID in replyCode:
-				return True
-		return False
-	for rule in listOfCommentRules:
-		if searchFor(rule):
-			return True
-	for rule in listOfSubmissionRules:
-		if searchFor(rule):
-			return True
-	#print "Didn't find it"
-	return False
-
-
 # this rule is brought to you by /u/xvvhiteboy
 def middleschool(comment, body):
 	lc = body.lower()
@@ -338,7 +317,13 @@ def forceComment(text, thingToReplyTo):
 def botLogic(comment, body):
 	lc = body.lower()
 	if " bot " in lc or " bot?" in lc or " bot," in lc or " bot." in lc or " bot!" in lc or "bot logic" in lc or "automated" in lc:
-		if str(comment.author) != USERNAME:
+		accuser = str(comment.author)
+		if accuser != USERNAME:
+			for tailID in botConversations:
+				if botConversations[tailID] and accuser in botConversations[tailID]:
+					#This may be a little too strict.
+					print "Bot accuser is already participating in a conversation elsewhere."
+					return None
 			print "Bot accusation detected. Initiate a conversation at the next opportunity."
 			botAccusations.append((comment,body))
 	return None
@@ -777,6 +762,7 @@ def checkSubreddit(sr, isCommentTracker):
 				is_self = submission.is_self
 				title = submission.title
 				url = submission.url
+				selftext = submission.selftext
 
 			for (rule, implementedRule) in (implementedCommentRules if isCommentTracker else implementedSubmissionRules):
 				if( (sr in trackingSubreddits) and \
@@ -1002,7 +988,7 @@ while True:
 	print "Done deleting comments."
 
 	print "Sleeping..."
-	time.sleep(60)
+	time.sleep(100)
 
 	#Are we done for the day?
 	currentTime = time.time()
