@@ -10,7 +10,7 @@ from collections import deque
 from password import PASSWORD
 
 
-USERNAME = "TEST_ACCT_PLZ_IGNORE"
+USERNAME = "Neil_Dat_grAss_Tyson"
 
 
 ######################################################################
@@ -102,6 +102,7 @@ def notWTF(comment,body):
 # This rule brought to you by: /u/FrenchfagsCantQueue
 def hello_timmie(comment, body):
 	if str(comment.author) == 'spoderman_tim':
+		comment.upvote()
 		return 'Hello spoderman_tim', comment
 	return None
 
@@ -153,7 +154,7 @@ def winningArgument(comment, body):
 				return None
 			#If the grandparent has been downvoted and is by the same person,
 			if grandparent.score < 0 and comment.author == grandparent.author:
-				if random.randint(0,1) == 0: #Reply to the comment with disagreement
+				if random.randint(0,2) == 0: #Reply to the comment with disagreement
 					if "ad hominem" in lc:
 						responses = [
 							">ad hominem\n\nI don't think that means what you think it means.",
@@ -189,8 +190,8 @@ def leSexual(comment, body):
 		potentialReplies = [
 			"http://i.imgur.com/yZbD4.jpg",
 			"http://i.imgur.com/Docb6.jpg",
-			"*shrug*\n Every thread."
-			"[For all those wondering..](http://www.reddit.com/r/AskReddit/comments/zw3j9/i_am_the_fatherredditor_who_lost_his_family_after/)",
+			"*shrug*\n\nEvery thread.",
+			"[For all those wondering...](http://www.reddit.com/r/AskReddit/comments/zw3j9/i_am_the_fatherredditor_who_lost_his_family_after/)",
 			"Keep your hairbrush away from your kids.",
 			"http://i.imgur.com/MYKti.png",
 			"I wonder what happened to that guy..",
@@ -311,7 +312,6 @@ def forceComment(text, thingToReplyTo):
 
 
 
-# TODO: Don't do this if it's already part of an ongoing bot conversation.
 # Restrict to @ORANGERED
 # Bypasses meta-rules, because it doesn't actually make any comments.
 def botLogic(comment, body):
@@ -349,7 +349,6 @@ def botConversationInitiator(comment,body):
 
 
 
-# TODO: check to see that the reply is by the same person.
 # Restrict to @ORANGERED
 # If someone replies to a bot accusation conversation, continue the conversation.
 # This rule bypasses the normal comment regulators.
@@ -425,10 +424,10 @@ listOfSubmissionRules = { #Rules to apply to submissions.
 
 # List of subreddits to check all rules in.
 trackingSubreddits = [
-	"test",
+	"circlejerk",
+	"magicskyfairy",
+	"atheismrebooted",
 	"braveryjerk",
-	"SOTBMeta",
-	#"circlejerk",
 	#"pics",
 	#"funny",
 	#"politics",
@@ -441,6 +440,8 @@ trackingSubreddits = [
 	#"atheism",
 	#"AdviceAnimals",
 	#"todayilearned",
+	"SOTBMeta",
+	"test",
 ]
 
 # These subreddits will not be checked by any rules EXCEPT those which explicitly
@@ -821,7 +822,6 @@ def processFeeder(submission):
 				if not x:
 					raise Exception("Error in commenting. Please try again.")
 				permalink = x.permalink
-				print "Successfully posted feeder comment:", permalink
 				identifyingToken = x.submission.id + "#" + x.id
 				feederThreadsWeveAnswered.append(feederThreadID)
 				feederRepliesWeveMade.append(identifyingToken)
