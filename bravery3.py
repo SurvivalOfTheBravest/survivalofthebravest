@@ -69,6 +69,7 @@ def murica(comment,body):
 # being in the wrong subreddit or to join in with them with your own top-level comment.
 # This rule brought to you by: /u/Carl_Bravery_Sagan
 def notWTF(comment,body):
+	if random.randint(0,3) != 1: return None
 	lowercaseComment = body.lower()
 	#Check if it contains any of the following:
 	triggercomments = [
@@ -244,7 +245,7 @@ def ilovemales(comment, body):
 def middleschool(comment, body):
 	lc = body.lower()
 	if "r/imgoingtohellforthis" in lc:
-		return("/r/imgoingtomiddleschoolforthis", comment)
+		return("[/r/imgoingtomiddleschoolforthis](/r/igtmsft)", comment)
 	return None
 
 # this rule is brought to you by /u/xvvhiteboy
@@ -332,7 +333,7 @@ def botLogic(comment, body):
 # Set a very low initial throttling factor so that this
 # takes one or two rounds to be invoked.
 def botConversationInitiator(comment,body):
-	if (True or random.randint(0,1000) == 1) and botAccusations:
+	if (False or random.randint(0,1000) == 1) and botAccusations:
 		(c,b) = botAccusations[0]
 		# Don't initiate the conversation in the same thread,
 		# and don't do it to ourselves (which would be really bad).
@@ -373,6 +374,25 @@ def botConversationListener(comment,body):
 
 
 
+bjClipboard = ""
+
+def bjCopyPaste(comment, body):
+	if random.randint(0,12)==1:
+		if bjClipboard == "":
+			#Get a new copypaste.
+			bjClipboard = body
+			print "Copied Braveryjerk comment for later use"
+			return None
+		else:
+			#Release the copypaste.
+			response = bjClipboard
+			bjClipboard = ""
+			return (response, comment)
+	return None
+
+
+
+
 #### SECTION 2: RULES TO APPLY TO SUBMISSIONS
 
 
@@ -399,7 +419,7 @@ listOfCommentRules = { #Rules to apply to comments.
 	notWTF:"notWTF",
 	oneTrueGod:"oneTrueGod",
 	sarahJessicaParker:"sarahJessicaParker",
-	murica:"murica",
+	#murica:"murica",
 	hello_timmie:"hello_timmie",
 	breadsticks:"breadsticks",
 	penisEnlargementPill:"penisEnlargementPill",
@@ -411,9 +431,9 @@ listOfCommentRules = { #Rules to apply to comments.
 	sofuckingedgy:"sofuckingedgy",
 	republicansAreEvil:"republicansAreEvil",
 	botConversationInitiator:"botConversationInitiator",
-
 	botLogic:"botLogic",
 	botConversationListener:"botConversationListener",
+	bjCopyPaste:"bjCopyPaste",
 }
 
 
@@ -424,22 +444,22 @@ listOfSubmissionRules = { #Rules to apply to submissions.
 
 # List of subreddits to check all rules in.
 trackingSubreddits = [
+	"pics",
+	"funny",
+	"politics",
+	"gaming",
+	"askreddit",
+	"videos",
+	"iama",
+	"wtf",
+	"aww",
+	"atheism",
+	"AdviceAnimals",
+	"todayilearned",
 	"circlejerk",
 	"magicskyfairy",
 	"atheismrebooted",
-	"braveryjerk",
-	#"pics",
-	#"funny",
-	#"politics",
-	#"gaming",
-	#"askreddit",
-	#"videos",
-	#"iama",
-	#"wtf",
-	#"aww",
-	#"atheism",
-	#"AdviceAnimals",
-	#"todayilearned",
+	"Braveryjerk",
 	"SOTBMeta",
 	"test",
 ]
@@ -457,8 +477,10 @@ specialSubreddits = [
 subredditRestrictions = {
 	republicansAreEvil:["test","politics"],
 	notWTF:["test","wtf"],
+	hello_timmie:["Braveryjerk"],
 	botLogic:["@ORANGERED"],
 	botConversationListener:["@ORANGERED"],
+	bjCopyPaste:["Braveryjerk"],
 }
 
 
@@ -522,7 +544,7 @@ def dumpBotConversations():
 	for tailID in botConversations:
 		if botConversations[tailID]:
 			array = botConversations[tailID]
-			file.write(tailID + " " + array[0] + " " + array[1].submission.id + "#" + array[1].id + " " + array[2])
+			file.write(tailID + " " + array[0] + " " + array[1].submission.id + "#" + array[1].id + " " + array[2]+"\n")
 	file.close()
 	print "botConversations successfully dumped."
 
@@ -585,7 +607,7 @@ def dumpMemory():
 	dumpDictionary(commentPlaceholders, "commentPlaceholders.txt", "string")
 	dumpDictionary(submissionPlaceholders, "submissionPlaceholders.txt", "string")
 
-	file = open("feederPlaceHolder.txt","w")
+	file = open("feederPlaceholder.txt","w")
 	file.write(feederPlaceholder)
 	file.close()
 
@@ -985,10 +1007,12 @@ while True:
 			myComment.delete()
 			#lel, 2brave4u
 			#myComment.edit(myComment.body + "\n\nEDIT: Downvotes? Seriously?")
+		else:
+			print "We won't delete that comment."
 	print "Done deleting comments."
 
 	print "Sleeping..."
-	time.sleep(100)
+	time.sleep(80)
 
 	#Are we done for the day?
 	currentTime = time.time()
