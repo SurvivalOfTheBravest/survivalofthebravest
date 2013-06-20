@@ -285,6 +285,17 @@ def republicansAreEvil(comment, body):
 			]
 			return (random.choice(responses), comment)
 	return None
+	
+#This rule brought to you by /u/Wall_Dough
+#Quotation of Tom Jones's "It's Not Unusual", which itself is not unusual
+#If the trigger is found, the comment has a 1/3 chance of occurring
+def itsNotUnusual(comment, body):
+    lc = body.lower()
+    lc = lc.replace("'","")
+    if "its not unusual" in lc and not "loved by anyone" in lc:
+        if random.randint(0,2) == 2:
+            return ("*It's not unusual to be loved by anyone*", comment)
+    return None
 
 
 # Helper function:
