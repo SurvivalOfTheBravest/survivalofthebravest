@@ -876,7 +876,7 @@ listOfCommentRules = { #Rules to apply to comments.
 	oneTrueGod:"oneTrueGod",
 	sarahJessicaParker:"sarahJessicaParker",
 	murica:"murica",
-	hello_timmie:"hello_timmie",
+	#hello_timmie:"hello_timmie",
 	breadsticks:"breadsticks",
 	penisEnlargementPill:"penisEnlargementPill",
 	Hello:"Hello",
