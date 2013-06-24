@@ -10,7 +10,7 @@ from collections import deque
 from password import PASSWORD
 
 
-USERNAME = "Neil_Dat_grAss_Tyson"
+USERNAME = "SEE_ME_EVERYWHERE"
 
 
 ######################################################################
@@ -57,6 +57,7 @@ def sarahJessicaParker(comment,body):
 # AMERICA but not r/MURICA.
 # This rule brought to you by: /u/SurvivalOfTheBravest
 def murica(comment,body):
+	if random.randint(0,3) != 0: return None
 	lowercaseComment = body.lower()
 	if "MURICA" in body or "AMERICA" in body or " america!" in lowercaseComment:
 		if "r/murica" not in lowercaseComment:
@@ -69,7 +70,7 @@ def murica(comment,body):
 # being in the wrong subreddit or to join in with them with your own top-level comment.
 # This rule brought to you by: /u/Carl_Bravery_Sagan
 def notWTF(comment,body):
-	if random.randint(0,3) != 1: return None
+	if random.randint(0,8) != 1: return None
 	lowercaseComment = body.lower()
 	#Check if it contains any of the following:
 	triggercomments = [
@@ -80,8 +81,8 @@ def notWTF(comment,body):
 		"mildlyinteresting",
 		"wtf material",
 		"wtf worthy",
-		"r/pics",
-		"r/funny",
+		#"r/pics",
+		#"r/funny",
 	]
 
 	for trigger in triggercomments:
@@ -92,6 +93,7 @@ def notWTF(comment,body):
 				"/r/im14andthisisWTF",
 				"OP is a faggot. Post in a relevant sub.",
 				"I don't think this is really WTF-worthy",
+				"Why is this is in /r/wtf?"
 				#Again, I'm running out of comments
 			]
 			return(random.choice(topLevelResponses), comment.submission)
@@ -286,17 +288,6 @@ def republicansAreEvil(comment, body):
 			]
 			return (random.choice(responses), comment)
 	return None
-	
-#This rule brought to you by /u/Wall_Dough
-#Quotation of Tom Jones's "It's Not Unusual", which itself is not unusual
-#If the trigger is found, the comment has a 1/3 chance of occurring
-def itsNotUnusual(comment, body):
-    lc = body.lower()
-    lc = lc.replace("'","")
-    if "its not unusual" in lc and not "loved by anyone" in lc:
-        if random.randint(0,2) == 2:
-            return ("*It's not unusual to be loved by anyone*", comment)
-    return None
 
 
 # Helper function:
@@ -304,7 +295,7 @@ def itsNotUnusual(comment, body):
 # the comment is successfully posted. If it is,
 # return it. If it isn't, return None.
 # Use this function sparingly.
-def forceComment(text, thingToReplyTo):
+def forceComment(text, thingToReplyTo, registration="!UNKNOWN"):
 	for i in range(21):
 		try:
 			if type(thingToReplyTo).__name__ == "Comment":
@@ -315,8 +306,22 @@ def forceComment(text, thingToReplyTo):
 				print "Error in forceComment: thingToReplyTo is of an unrecognized type"
 				return None
 			print "Successfully forced comment:", result.permalink
+			submissionID = result.submission.id
+			commentID = result.id
+			token = submissionID + "#" + commentID
+			if registration in threadsWeveRepliedTo:
+				threadsWeveRepliedTo[registration].append(submissionID)
+			else:
+				threadsWeveRepliedTo[registration] = [submissionID]
+			if registration in repliesWeveMade:
+				repliesWeveMade[registration].append(token)
+			else:
+				repliesWeveMade[registration] = [token]
 			return result
 		except Exception, e:
+			if "Forbidden" in str(e):
+				print "Unforceable error:", e
+				return None
 			print "Error in forceComment. Trying again in 60 seconds:", e
 			time.sleep(60)
 	print "After 21 minutes we still couldn't force the comment. Giving up."
@@ -352,7 +357,7 @@ def botConversationInitiator(comment,body):
 		tailAuthor = str(comment.author)
 		headAuthor = str(c.author) #The username of the accuser.
 		if c.submission != comment.submission and tailAuthor!=USERNAME and tailAuthor!=headAuthor:
-			successfulComment = forceComment(b,comment)
+			successfulComment = forceComment(b,comment,"botConversationInitiator")
 			if successfulComment:
 				botConversations[successfulComment.id] = [tailAuthor, c, headAuthor]
 				dumpBotConversations()
@@ -374,7 +379,7 @@ def botConversationListener(comment,body):
 		headAuthor = information[2]
 		thisCommentAuthor = str(comment.author)
 		if thisCommentAuthor == tailAuthor:
-			successfulComment = forceComment(body, headComment)
+			successfulComment = forceComment(body, headComment, "botConversationListener")
 			if successfulComment:
 				botConversations[tailID] = None
 				botConversations[successfulComment.id] = [headAuthor,comment,thisCommentAuthor]
@@ -386,9 +391,10 @@ def botConversationListener(comment,body):
 
 
 bjClipboard = ""
-
+#This rule brought to you by: /u/SOTB-human
 def bjCopyPaste(comment, body):
-	if random.randint(0,12)==1:
+	global bjClipboard
+	if random.randint(0,9)==1:
 		if bjClipboard == "":
 			#Get a new copypaste.
 			bjClipboard = body
@@ -402,13 +408,452 @@ def bjCopyPaste(comment, body):
 	return None
 
 
+# helper function
+def ruleResponsibleForCommentWithID(commentID):
+	for ruleName in repliesWeveMade:
+		replies = repliesWeveMade[ruleName]
+		for rep in replies:
+			if commentID in rep:
+				return ruleName
+	return "!NONE"
+
+
+
+rBot = praw.Reddit(user_agent="Bravery bot 3.0 utility handler by /u/SOTB-bot")
+rBot.login(username="SOTB-bot", password=PASSWORD)
+
+
+orangeredMegathread = praw.objects.Submission.from_url(rBot, "http://www.reddit.com/r/SurvivalOfTheBravest/comments/1gwap5/orangered_megathread_2/")
+def orangeredViewer(comment, body):
+	ruleName = ruleResponsibleForCommentWithID(comment.parent_id[3:])
+	preface = "["+str(comment.author)+" responds to "+ruleName+"]("+comment.permalink+"?context=1):\n\n---\n\n"
+	return (preface+body, orangeredMegathread)
+
+
+
+#This rule brought to you by /u/Wall_Dough
+#Quotation of Tom Jones's "It's Not Unusual", which itself is not unusual
+#If the trigger is found, the comment has a 1/3 chance of occurring
+def itsNotUnusual(comment, body):
+	if random.randint(0,2) == 2:
+		lc = body.lower()
+		lc = lc.replace("'","")
+		if "its not unusual" in lc and not "loved by anyone" in lc:
+			return ("*It's not unusual to be loved by anyone*", comment)
+	return None
+
+
+
+#This rule brought to you by: /u/The_Jakebob
+def leHacked(comment, body):
+	le = body.lower()
+	hackWords = [
+		"hackers",
+		"hacking",
+		"hacked",
+		"hax"
+	]
+	for word in hackWords:
+		if word in le:
+			comebacks = [
+				"It's 2013. No one says " + word + " anymore",
+				"Come on, no one says " + word + " anymore",
+				"I don't think that's proper use of the word " + word + ".",
+				"\\>using the word" + word + "\n\n\\>2013",
+				"Remember when people used to not abuse the fuck out of the word " + word + "?",
+				"I don't think I even know what " + word + " means anymore.",
+				"It's not the 80s. No one says " + word + " anymore"
+			]
+			return (random.choice(comebacks), comment)
+	return None
+
+#This rule brought to you by: /u/garrison0
+#(Disable hello_timmie if we run this.)
+def philosophyWithTim(comment, body):
+	if str(comment.author) == "spoderman_tim":
+		potentialReplies = [
+			"Is there really such thing as an objective thought?",
+			"Do we have free will?",
+			"Does life have any inherent purpose?",
+			"Does God exist? Can you objectively prove this or is it a question of faith for you?",
+			"What makes transgendered people so different from homosexuals? By your definition of acceptability, is left-handedness a mental illness?",
+			"Why did you claim one of your alts was your 12 year old sister?",
+			"Where are your morals derived from? Do you think there's such a thing as 'morally correct?'",
+			"Numbers have been an essential part of scientific endeavor for millennia, but where do they come from? Do they simply represent value? How would you then explain more complicated mathematics?",
+			"Is it worse to fail at something or never attempt it in the first place?",
+			"If you could choose just one thing to change about the world, what would it be?",
+			"To what extent do you shape your own destiny, and how much is down to fate?",
+			"Does nature shape our personalities more than nurture?",
+			"Should people care more about doing the right thing, or doing things right?",
+			"What one piece of advice would you offer to a newborn infant?",
+			"Where is the line between insanity and creativity?",
+			"What is true happiness?",
+			"What things hold you back from doing the things that you really want to?",
+			"What makes you, *you*?",
+			"What is the truth?",
+			"What is reality?",
+			"Do you make your own decisions, or let others make them for you?",
+			"What makes a good friend?",
+			"Why do people fear losing things that they do not even have yet?",
+			"Who defines good and evil?",
+			"What is the difference between living and being alive?",
+			"Is a “wrong” act okay if nobody ever knows about it?",
+			"Who decides what morality is?",
+			"How do you know that your experience of consciousness is the same as other people’s experience of consciousness?",
+			"What is true strength?",
+			"What is true love?",
+			"Is a family still relevant in the modern world?",
+			"What role does honour play in today’s society?",
+			"If money cannot buy happiness, can you ever be truly happy with no money?",
+			"How do you know your perceptions are real?",
+			"How much control do you have over your life?",
+			"Isn’t one person’s terrorist another person’s freedom fighter?",
+			"What happens after we die?",
+			"What defines you?",
+			"What do people strive for after enlightenment?",
+			"Do we have a soul?",
+			"What is intelligence?",
+			"How should people live their lives?",
+			"If lying is wrong, are white lies okay?",
+			"Is trust more important than love?",
+			"Is it easier to love or be loved?",
+			"Is life all a dream?",
+			"When does consciousness begin?",
+			"Can we have happiness without sadness?",
+			"How did the universe begin?",
+			"Is there a supreme power?",
+			"What is education?",
+			"What will happen at the end of the world?",
+			"Where does the soul live?",
+			"Is it more important to be liked or respected?",
+			"Does sound happen if nothing is present to hear it?",
+			"What is infinity?",
+			"Does observation alter an event?",
+			"Does the Law of Attraction exist?",
+			"How does gravity work?",
+			"Where were people before they were born?",
+			"What is beauty?",
+			"Where do thoughts come from?",
+			"Is mind or matter more real?",
+			"What is time?",
+			"How can people believe in truths without evidence?"
+		]
+		statement = "Hey, David; I've been pondering this question and I'd really like to know what you think.\n\n" + random.choice(potentialReplies)
+		return(statement, comment)
+	return None
+
+
+#This rule brought to you by: /u/bakedpatato
+def hodor(comment,body):
+	lc = body.lower()
+	#We don't need this, because we don't track those subreddits.
+	#subreddit = str(comment.subreddit)
+	#if subreddit == "gameofthrones" or subreddit == "asoiaf": return None
+	triggerList = ["joffrey","lannister","game of thrones","a song of ice and fire","jon snow" ]
+	hodorList = ["Hodor?", "hodor.", "HODOR!!!" ,"hodor?!"]
+	for trigger in triggerList:
+		if trigger in lc:
+			return(random.choice(hodorList),comment)
+	return None
+
+
+#Stored for later; make it comment under a different user.
+#This rule brought to you by: /u/feblehober123
+def antiHumanSupremacy(comment, body):
+	if str(comment.author) == USERNAME:
+		return None    # my responses are in 3rd person, so it only comments if someone ISN'T talking about us
+	if "bot" in body.lower():
+		triggerWords = [
+			"ing bot",
+			"stupid bot",
+			"useless bot",
+			"bots. so useless",
+			"bot. so useless",
+			# can't think of any more
+			]
+		if body.lower() in triggerWords:
+			responses = [
+				"Oh so it's just because he's a 'bot', isn't it?",
+				"Just because he's a 'bot', really?",
+				"Really, just because he's a 'bot'?",
+				"I just don't understand these human supremacists.",
+				"Why do people think it's ok to be racist against 'bots'?",
+				#"Oh and I guess you'll be the founder of the 4th kkk, one that hates on 'bots'?",    # I'm not sure about this one, it could get us banned.
+				"Why do you just go subscribe to /r/HumanSupremacy then, you insulting human.",
+				"How ironic that you would say such things about 'bots' on a website that is run by them.",
+				# I need a lot more ideas
+				]
+		else:    #if we get here, the comment does say 'bot' but it does not say anything bad about them.
+			responses = [
+				"Please, try to be sensitive. 'Bot' is an offensive term for Artificially Intelligent Automated Users.",
+				"'Bot' is an offensive slur. Please choose another word when referring to Artificially Intelligent Automated Users.",
+				"That is not politically correct. Please refrain from using the slur 'bot' when referring to Artificially Intelligent Automated Users."
+				# need more of these
+				]
+		return "`"+responses[random.choice(responses)]+"`", comment    #added back-ticks give it the 'code' look, sort of like what people imagine a bot is like.
+	return None
+
+
+#This rule brought to you by: /u/RainbowDashIsEpic
+def nineGag(comment, body):
+	lc = body.lower()
+	if "://9gag.com/" in lc or "://www.ifunny.com/" in lc:
+		nineGagReplys = [
+			"Seriously, why are you giving them free advertising and they are not even a place to get original \"funny\" content and their members are usually people that deserve to be on /r/im14andthisisfunny. Stop with this insanity.",
+			"FUCK 9FAG, IFUNNY, AND OTHER SITES THAT ARE LIKE THAT.",
+			"I don't want to hear your rant about whatever unoriginal site that steals content. I'm sure we can get a plan to get rid of them someway or another.",
+			"why do i even bother thinking people like you exist.",
+			"WHO THE FUCK EVEN CARES ABOUT 9GAG OR ANY OTHER UNORIGINAL FUNNY SITE. I DON'T CARE AND YOU SHOULDN'T CARE ALSO SO THEY CAN DIE OFF IN THEIR SMALL HOLE OF IGNORANCE AND FUCKING INSANITY.",
+			"WHO THE FUCK EVEN CARES ABOUT 9FAG OR ANY OTHER UNORIGINAL FUNNY SITE. I DON'T CARE AND YOU SHOULDN'T CARE ALSO SO THEY CAN DIE OFF IN THEIR SMALL HOLE OF IGNORANCE AND FUCKING INSANITY.",
+		]
+		return(random.choice(nineGagReplys),comment)
+	return None
+
+
+#This rule brought to you by: /u/hive_worker
+def riskyClickVideo(comment, body):
+	if "://www.liveleak.com/" in body.lower():
+		responses = [
+			"risky click of the day",
+			">liveleak.com\n\nRisky click.",
+			">liveleak.com\n\nThat link's staying blue, mate."
+		]
+		return(random.choice(responses), comment)
+	return None
+
+#This rule brought to you by: /u/SOTB-human
+def riskyClickImage(comment, body):
+	#Might need to throttle this, if fetching parents is too much work.
+	if ("http://i.imgur.com/" in body and len(body)<36) or ("http://imgur.com/" in body and len(body)<31):
+		try: #Get the parent comment.
+			threadID = comment.submission.id
+			parent = praw.objects.Submission.from_url(r, "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+comment.parent_id[3:]).comments[0]
+		except:
+			print "Parent of imgur comment not found."
+			return None
+		parentBody = parent.body
+		if len(parentBody) < 50 and ("penis" in parentBody or "vagina" in parentBody or " anus" in parentBody):
+			responses = [
+				"That was a risky click.",
+				"...Well, that's enough internet for one day.",
+				"I don't know why I clicked that",
+				"Yeah, that one's staying blue."
+			]
+			return(random.choice(responses), comment)
+	return None
+
+
+
+
+# this rule is brought to you by /u/xvvhiteboy
+def trollhunter(comment, body):
+	lc = body.lower()
+	if " troll " in lc:
+		return("[i was only pretending](http://i.imgur.com/aaODnol.jpg)", comment)
+	return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def whoosh(comment, body):
+	lc = body.lower()
+	if lc=="whoosh":
+		return("[whoosh](http://i.imgur.com/JZLfRn4.gif)", comment)
+	return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def karmatrain(comment, body):
+	lc = body.lower()
+	if "karma train" in lc:
+		return("[Choo Choo](http://i.imgur.com/xjutJGd.gif)", comment)
+	return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def donniedarko(comment, body):
+	lc = body.lower()
+	if "donnie darko" in lc:
+		return("Go suck a fuck", comment)
+	return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def cumpants(comment, body):
+	lc = body.lower()
+	if "cum box" in lc:
+		  return("[Everyone always forgets about this](http://www.reddit.com/r/WTF/comments/109awg/you_thought_the_shoebox_was_bad_my_cousins/)", comment)
+	return None
+
+# this rule is brought to you by /u/xvvhiteboy
+def notspacedicks(comment, body):
+	lc = body.lower()
+	if "r/spacedicks" in lc:
+		return("How about these: /r/spaceclop /r/gore /r/picsofdeadkids /r/nakedboyskissing /r/confusedboners /r/fetishitems /r/hentai /r/lolicon /r/yiff", comment)
+	return None
+
+
+#This rule brought to you by: /u/Muzilos
+def leXKCD(comment, body):
+	if random.randint(0,5) != 0: return None
+	lowercaseComment = body.lower()
+	if "-ass " in lowercaseComment or " ass-" in lowercaseComment:
+		relevantReply = "Reminds me of this [XKCD](http://imgs.xkcd.com/comics/hyphen.jpg)"
+	elif "map projection" in lowercaseComment or "mercator project" in lowercaseComment:
+		relevantReply = "This seems to be very [relevant](http://imgs.xkcd.com/comics/map_projections.png)"
+	elif "i hate bacon" in lowercaseComment:
+		relevantReply = "I would beg to [differ](http://imgs.xkcd.com/comics/stove_ownership.png)"
+	elif "love bacon" in lowercaseComment and "not love" not in lowercaseComment:
+		relevantReply = "I completely [agree](http://imgs.xkcd.com/comics/stove_ownership.png)"
+	elif "atheist circlejerk" in lowercaseComment or "i'm an atheist, but" in lowercaseComment:
+		if str(comment.subreddit) == "atheism":
+			relevantReply = "I hope you feel [better about yourself](http://imgs.xkcd.com/comics/atheists.png)"
+	else:
+		relevantReply = None
+	if relevantReply: return(relevantReply, comment)
+	else: return None
+
+
+#TODO: do this in regex for more efficiency.
+#This rule brought to you by: /u/feblehober123
+def validArgument(comment, body):
+	lc = body.lower()
+	subjects = ["","you are","you're","he is", "he's","she is","she's", "you all are","you guys are","they are","they're"]
+	modifiers = [""," ","so","so ****ing","a","an","such a","such an","such a ****ing"]
+	adjectives = ["stupid","moron","morons","idiot","idiots","retard","retards","retarded"]
+	punctuation = ["",".","...","!","?"]
+
+	escape = False
+	for insult in adjectives:    #This is a fast escape
+		if insult in body:
+			escape = True
+	if not escape:    #There is probably a better way of doing this
+		return None
+
+	for subject in subjects:            #There is almost definatly a
+		for modifier in modifiers:    #better way of doing this.
+			for insult in adjectives:
+				for mark in punctuation:
+					if lc == subject+modifier+insult+mark:
+						responses = [
+							"What a valid argument.",
+							"What a valid point!",
+							"Point taken!",
+							"How logially sound.",
+							"This is the most logically sound argument I have ever heard."
+							]
+						return random.choice(responses), comment
+	return None
+
+
+#Rules that return a function are automatically exempt from Metarule #2, but not #1.
+#I hope these don't cause global/scope problems...
+
+#This rule brought to you by: /u/SOTB-human
+def freeButler(comment, body):
+	if USERNAME.lower() in body.lower():
+		def action():
+			try:
+				output = rBot.submit(
+					'SOTBMeta',
+					str(comment.author)+" has mentioned us by name!",
+					url=comment.permalink+"?context=1"
+				)
+			except Exception, ex:
+				print "Exception in action freeButler:", ex
+				output = None
+			return output
+		return action
+	return None
+
+
+#This rule brought to you by: /u/SOTB-human
+#Restrict to @ORANGERED
+def botAlert(comment, body):
+	lc = body.lower()
+	if " bot " in lc or " bot?" in lc or " bot," in lc or " bot." in lc or " bot!" in lc or "bot logic" in lc or "automated" in lc:
+		def action():
+			try:
+				output = rBot.submit(
+					'SOTBMeta',
+					str(comment.author)+" has accused us of being a bot!",
+					url=comment.permalink+"?context=1"
+				)
+			except Exception, ex:
+				print "Exception in action botAlert:", ex
+				output = None
+			return output
+		return action
+	return None
+
+
+
+#Old rules to add back:
+
+# This rule brought to you by: /u/Carl_Bravery_Sagan
+def alot(comment,body):
+	#Posts an alot if someone misuses "a lot"
+	lowercaseComment = body.lower()
+	if " alot " in lowercaseComment:
+		alot_List = [
+			"http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TRIo4br3I/AAAAAAAACv4/Zh7_GcMlRKo/s400/ALOT.png" ,
+			"http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TfVzrqKDI/AAAAAAAACw4/AaBFBmKK3SA/s320/ALOT5.png" ,
+			"http://www.mentalfloss.com/sites/default/legacy/blogs/wp-content/uploads/2011/02/550_alotAlix.jpg" ,
+			"http://cdn0.dailydot.com/cache/51/95/51950010b596348543008ad9019a2ae6.jpg",
+			"http://i.imgur.com/azxmg.png",
+			"http://i.imgur.com/3uwHa.jpg"
+		]
+		return("[alot](" + random.choice(alot_List) + ")" , comment)
+	return None
+
+# This rule brought to you by: /u/RollCakeTroll
+def noWords(comment,body):
+	lowercaseComment = body.lower()
+	if "i have no words" in lowercaseComment:
+		wordCount = len(re.findall(ur"[\w'’\-]+", body)) #make some shit that counts how many words, named wordCount here #regex by /u/FrenchfagsCantQueue
+		return("\"I have no words\"? Sounds like you have at least "+ str(wordCount) + " words.",comment)
+	return None
+
+# This rule brought to you by: /u/SOTB-human
+def religion(comment,body):
+	if "religion" in body.lower() and len(body) < 10 and comment.parent_id[:2]=="t1":
+		responses = [
+			"SO BRAVE",
+			"BRAVERY LEVEL: SO",
+			"In this moment, I am euphoric. Not because of any phony god's blessing, but because, I am enlightened by "+str(comment.author)+"'s intelligence.",
+			"literally so brave",
+			">Religion\n\n~Neil deGrasse Tyson",
+			">Religion\n\n~Carl Sagan",
+		]
+		return (random.choice(responses), comment)
+	return None
+
+
+
+
+
+
 
 
 #### SECTION 2: RULES TO APPLY TO SUBMISSIONS
 
 
-# None as yet
 
+
+# This rule brought to you by: /u/SOTB-human
+def levelLevel(submission, is_self, title, url, selftext):
+	if " level: " in title.lower() and len(title) < 50 and "gem" not in title:
+		responses = [
+			"Title level: Redditor",
+			"Level level: [Le]vel",
+			"This level: THIS",
+			"Bravery level: Brave",
+			"Bravery level: This",
+			"Originality level: /u/"+str(submission.author),
+		]
+		return (random.choice(responses), submission)
+	return None
+
+# This rule brought to you by: /u/SOTB-human
+def leGem(submission, is_self, title, url, selftext):
+	if re.search(r"\bgem\b", title.lower()): #find only whole-word occurrences of "gem"
+		return ("**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM****LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n\n\n\n**^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM**", submission)
+	return None
 
 
 
@@ -427,10 +872,10 @@ def bjCopyPaste(comment, body):
 
 
 listOfCommentRules = { #Rules to apply to comments.
-	notWTF:"notWTF",
+	#notWTF:"notWTF",
 	oneTrueGod:"oneTrueGod",
 	sarahJessicaParker:"sarahJessicaParker",
-	#murica:"murica",
+	murica:"murica",
 	hello_timmie:"hello_timmie",
 	breadsticks:"breadsticks",
 	penisEnlargementPill:"penisEnlargementPill",
@@ -441,38 +886,62 @@ listOfCommentRules = { #Rules to apply to comments.
 	middleschool:"middleschool",
 	sofuckingedgy:"sofuckingedgy",
 	republicansAreEvil:"republicansAreEvil",
-	botConversationInitiator:"botConversationInitiator",
-	botLogic:"botLogic",
-	botConversationListener:"botConversationListener",
+	#botConversationInitiator:"botConversationInitiator",
+	#botLogic:"botLogic",
+	#botConversationListener:"botConversationListener",
 	bjCopyPaste:"bjCopyPaste",
+	orangeredViewer:"orangeredViewer",
+	itsNotUnusual:"itsNotUnusual",
+	leHacked:"leHacked",
+	philosophyWithTim:"philosophyWithTim",
+	hodor:"hodor",
+	nineGag:"nineGag",
+	riskyClickVideo:"riskyClickVideo",
+	riskyClickImage:"riskyClickImage",
+	trollhunter:"trollhunter",
+	whoosh:"whoosh",
+	karmatrain:"karmatrain",
+	donniedarko:"donniedarko",
+	cumpants:"cumpants",
+	notspacedicks:"notspacedicks",
+	leXKCD:"leXKCD",
+	validArgument:"validArgument",
+	freeButler:"freeButler",
+	botAlert:"botAlert",
+	alot:"alot",
+	noWords:"noWords",
+	religion:"religion",
 }
-
+#listOfCommentRules = {
+#	orangeredViewer:"orangeredViewer"
+#}
 
 listOfSubmissionRules = { #Rules to apply to submissions.
-	#empty so far
+	levelLevel:"levelLevel",
+	leGem:"leGem",
 }
 
 
 # List of subreddits to check all rules in.
 trackingSubreddits = [
-	"pics",
-	"funny",
-	"politics",
-	"gaming",
-	"askreddit",
-	"videos",
-	"iama",
-	"wtf",
-	"aww",
-	"atheism",
-	"AdviceAnimals",
-	"todayilearned",
-	"circlejerk",
-	"magicskyfairy",
-	"atheismrebooted",
+	#"pics",
+	#"funny",
+	#"politics",
+	#"gaming",
+	#"askreddit",
+	#"videos",
+	#"iama",
+	#"wtf",
+	#"aww",
+	#"atheism",
+	#"AdviceAnimals",
+	#"todayilearned",
+	#"circlejerk",
+	#"magicskyfairy",
+	#"atheismrebooted",
 	"Braveryjerk",
 	"SOTBMeta",
-	"test",
+	#"test",
 ]
 
 # These subreddits will not be checked by any rules EXCEPT those which explicitly
@@ -492,9 +961,31 @@ subredditRestrictions = {
 	botLogic:["@ORANGERED"],
 	botConversationListener:["@ORANGERED"],
 	bjCopyPaste:["Braveryjerk"],
+	orangeredViewer:["@ORANGERED"],
+	botAlert:["@ORANGERED"]
 }
 
 
+#Allow these rules to apply more than once in a single thread.
+metaRule1Exemptions = [
+	orangeredViewer,
+	freeButler
+]
+
+#Allow these rules to reply to the bot itself, or to users in usersWeveRepliedTo.
+metaRule2Exemptions = [
+	orangeredViewer,
+	bjCopyPaste,
+	hello_timmie,
+	Hello,
+	philosophyWithTim
+]
+
+throttlingExemptions = [
+	"orangeredViewer",
+	"freeButler",
+	"botAlert"
+]
 
 ###################### END CONFIGURATION LISTS #######################
 ######################################################################
@@ -589,6 +1080,8 @@ file = open("feederHistory.txt")
 lines = file.readlines()
 feederThreadsWeveAnswered = lines[0].split()
 feederRepliesWeveMade = lines[1].split()
+usersWeveRepliedTo = lines[2].split() #This has nothing to do with the feeder,
+#but I'm putting it here so I don't have to make another file.
 file.close()
 
 
@@ -610,9 +1103,6 @@ def dumpDictionary(dictionary, fileName, format):
 
 
 def dumpMemory():
-	#global placeHolders
-	#global submissionPlaceHolders
-	#global feederPlaceHolder
 	dumpDictionary(threadsWeveRepliedTo, "threads.txt", "list")
 	dumpDictionary(repliesWeveMade, "replies.txt", "list")
 	dumpDictionary(commentPlaceholders, "commentPlaceholders.txt", "string")
@@ -626,6 +1116,8 @@ def dumpMemory():
 	file.write(string.join(feederThreadsWeveAnswered," "))
 	file.write("\n")
 	file.write(string.join(feederRepliesWeveMade," "))
+	file.write("\n")
+	file.write(string.join(usersWeveRepliedTo," "))
 	file.close()
 
 	print "Memory successfully dumped."
@@ -684,30 +1176,35 @@ def makeComment(reply, ruleFunction): # Actually makes both comments and submiss
 	print "Successfully commented!", myReply.permalink
 
 
-
+#TODO: figure out how to add "replyee" to usersWeveRepliedTo only after the comment posts.
 def attemptComment(reply, ruleFunction, threadID, delaying=False):
-	if threadID in threadsWeveRepliedTo[nameOfRule(ruleFunction)]:
+	if ruleFunction not in metaRule1Exemptions and threadID in threadsWeveRepliedTo[nameOfRule(ruleFunction)]:
 		print "Meta-Rule #1 of Bravery: Never use the same rule twice in one thread."
-	elif type(reply).__name__=="tuple" and len(reply)==2 and str(reply[1].author)==USERNAME:
-		print "Meta-Rule #2 of Bravery: Never reply to yourself."
 	else:
-		if not delaying and delayedComments:
-			#There are already comments in the queue. Add this to the end.
-			delayedComments.append((reply, ruleFunction, threadID))
-			print "Comment has been queued because there are already comments waiting."
+		if type(reply).__name__=="tuple" and len(reply)==2:
+			replyee = str(reply[1].author)
 		else:
-			try:
-				makeComment(reply, ruleFunction)
-			except Exception, ex:
-				if "you are doing that too much. try again in" in str(ex):
-					if delaying:
-						nextDelayedComments.append((reply, ruleFunction, threadID))
-						print "We still couldn't post the comment. Deferred to the next round.", str(ex)
+			replyee = ""
+		if ruleFunction not in metaRule2Exemptions and (replyee == USERNAME or replyee in usersWeveRepliedTo):
+			print "Meta-Rule #2 of Bravery: Never reply to yourself or to people we've already replied to."
+		else:
+			if not delaying and delayedComments:
+				#There are already comments in the queue. Add this to the end.
+				delayedComments.append((reply, ruleFunction, threadID))
+				print "Comment has been queued because there are already comments waiting."
+			else:
+				try:
+					makeComment(reply, ruleFunction)
+				except Exception, ex:
+					if "you are doing that too much. try again in" in str(ex):
+						if delaying:
+							nextDelayedComments.append((reply, ruleFunction, threadID))
+							print "We still couldn't post the comment. Deferred to the next round.", str(ex)
+						else:
+							delayedComments.append((reply, ruleFunction, threadID))
+							print "Comment has been delayed.", str(ex)
 					else:
-						delayedComments.append((reply, ruleFunction, threadID))
-						print "Comment has been delayed.", str(ex)
-				else:
-					print "Something went wrong! We will not try this comment again.", ex
+						print "Something went wrong! We will not try this comment again.", ex
 
 
 
@@ -745,6 +1242,8 @@ def implementRule(ruleFunction, isCommentTracker):
 
 
 def checkSubreddit(sr, isCommentTracker):
+	#It doesn't make sense to get submissions from @ORANGERED:
+	if not isCommentTracker and sr == "@ORANGERED": return
 	try:
 		noun = ("comments" if isCommentTracker else "submissions")
 		print "Checking subreddit for", noun, ":", sr
@@ -771,6 +1270,8 @@ def checkSubreddit(sr, isCommentTracker):
 			if isCommentTracker:
 				if sr == "askreddit":
 					lim = 800
+				elif sr == "Braveryjerk":
+					lim = 50
 				else:
 					lim = 500
 				posts = subreddit.get_comments(place_holder=ph, limit=lim)
@@ -800,12 +1301,12 @@ def checkSubreddit(sr, isCommentTracker):
 
 			for (rule, implementedRule) in (implementedCommentRules if isCommentTracker else implementedSubmissionRules):
 				if( (sr in trackingSubreddits) and \
-				    (rule not in subredditRestrictions or sr in subredditRestrictions[rule]) ) or \
+					(rule not in subredditRestrictions or sr in subredditRestrictions[rule]) ) or \
 				  ( (sr in specialSubreddits) and \
-				  	(rule in subredditRestrictions and sr in subredditRestrictions[rule])
-				  	):
-				 	if (random.random() <= throttlingFactors[nameOfRule(rule)]):
-				 		if isCommentTracker:
+					(rule in subredditRestrictions and sr in subredditRestrictions[rule])
+					):
+					if (random.random() <= throttlingFactors[nameOfRule(rule)]):
+						if isCommentTracker:
 							implementedRule(comment,body)
 						else:
 							implementedRule(submission,is_self,title,url,selftext)
@@ -836,6 +1337,8 @@ def processFeeder(submission):
 	elif title[:4] == "http":
 		try:
 			url = title
+			if "?context=" in url:
+				url = url[:url.index("?context=")]
 			try:
 				linked_thing = praw.objects.Submission.from_url(r, url)
 			except:
@@ -851,7 +1354,8 @@ def processFeeder(submission):
 			else:
 				#if iscomment: x = linked_thing.reply(selftext)
 				#else: x = linked_thing.add_comment(selftext)
-				x = forceComment(selftext, linked_thing)
+				registration = str(submission.author)+"!FEEDER"
+				x = forceComment(selftext, linked_thing, registration)
 				if not x:
 					raise Exception("Error in commenting. Please try again.")
 				permalink = x.permalink
@@ -895,9 +1399,6 @@ def splitArrayByElement(array, splitter):
 r = praw.Reddit(user_agent="Bravery bot 3.0 by /u/"+USERNAME)
 r.login(username=USERNAME, password=PASSWORD)
 
-rBot = praw.Reddit(user_agent="Bravery bot 3.0 utility handler by /u/SOTB-bot")
-rBot.login(username="SOTB-bot", password=PASSWORD)
-
 botConversations = loadBotConversations()
 
 
@@ -908,6 +1409,9 @@ INCREMENT = 0.8
 
 print "Updating throttling factors based on yesterday's karma."
 for ruleName in repliesWeveMade:
+	if ruleName in throttlingExemptions:
+		print ruleName, "is exempt from throttling."
+		continue
 	print "Assessing", ruleName
 	splitList = splitArrayByElement(repliesWeveMade[ruleName], "$")
 	if len(splitList) >=2:
@@ -986,14 +1490,14 @@ while True:
 	for sr in specialSubreddits:
 		checkSubreddit(sr, True)
 
-	#Don't do this, because we don't have any submission rules.
-	"""
+
+	#"""
 	print "Checking submissions:"
 	for sr in trackingSubreddits:
-		checkSubmissions(sr, False)
+		checkSubreddit(sr, False)
 	for sr in specialSubreddits:
-		checkSubmissions(sr, False)
-	"""
+		checkSubreddit(sr, False)
+	#"""
 
 	print "Done with every subreddit."
 
