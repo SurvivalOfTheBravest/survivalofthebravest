@@ -5,6 +5,7 @@ import random
 import string
 import re
 from collections import deque
+import sys
 
 
 from password import PASSWORD
@@ -394,7 +395,7 @@ bjClipboard = ""
 #This rule brought to you by: /u/SOTB-human
 def bjCopyPaste(comment, body):
 	global bjClipboard
-	if random.randint(0,9)==1:
+	if random.randint(0,5)==1:
 		if bjClipboard == "":
 			#Get a new copypaste.
 			bjClipboard = body
@@ -446,23 +447,24 @@ def itsNotUnusual(comment, body):
 
 #This rule brought to you by: /u/The_Jakebob
 def leHacked(comment, body):
+	if random.randint(0,1) != 1: return None
 	le = body.lower()
 	hackWords = [
-		"hackers",
-		"hacking",
-		"hacked",
-		"hax"
+		" hackers",
+		" hacking",
+		" hacked",
+		" hax"
 	]
 	for word in hackWords:
 		if word in le:
 			comebacks = [
-				"It's 2013. No one says " + word + " anymore",
-				"Come on, no one says " + word + " anymore",
-				"I don't think that's proper use of the word " + word + ".",
+				"It's 2013. No one says" + word + " anymore",
+				"Come on, no one says" + word + " anymore",
+				"I don't think that's proper use of the word" + word + ".",
 				"\\>using the word" + word + "\n\n\\>2013",
-				"Remember when people used to not abuse the fuck out of the word " + word + "?",
-				"I don't think I even know what " + word + " means anymore.",
-				"It's not the 80s. No one says " + word + " anymore"
+				"Remember when people used to not abuse the fuck out of the word" + word + "?",
+				"I don't think I even know what" + word + " means anymore.",
+				"It's not the 80s. No one says" + word + " anymore"
 			]
 			return (random.choice(comebacks), comment)
 	return None
@@ -648,7 +650,7 @@ def riskyClickImage(comment, body):
 # this rule is brought to you by /u/xvvhiteboy
 def trollhunter(comment, body):
 	lc = body.lower()
-	if " troll " in lc:
+	if random.randint(0,4) == 1 and " troll " in lc:
 		return("[i was only pretending](http://i.imgur.com/aaODnol.jpg)", comment)
 	return None
 
@@ -714,7 +716,7 @@ def leXKCD(comment, body):
 def validArgument(comment, body):
 	lc = body.lower()
 	subjects = ["","you are","you're","he is", "he's","she is","she's", "you all are","you guys are","they are","they're"]
-	modifiers = [""," ","so","so ****ing","a","an","such a","such an","such a ****ing"]
+	modifiers = [""," ","so","so fucking","a","an","such a","such an","such a fucking"]
 	adjectives = ["stupid","moron","morons","idiot","idiots","retard","retards","retarded"]
 	punctuation = ["",".","...","!","?"]
 
@@ -734,7 +736,7 @@ def validArgument(comment, body):
 							"What a valid argument.",
 							"What a valid point!",
 							"Point taken!",
-							"How logially sound.",
+							"How logically sound.",
 							"This is the most logically sound argument I have ever heard."
 							]
 						return random.choice(responses), comment
@@ -924,21 +926,21 @@ listOfSubmissionRules = { #Rules to apply to submissions.
 
 # List of subreddits to check all rules in.
 trackingSubreddits = [
-	#"pics",
-	#"funny",
-	#"politics",
-	#"gaming",
-	#"askreddit",
-	#"videos",
-	#"iama",
-	#"wtf",
-	#"aww",
-	#"atheism",
-	#"AdviceAnimals",
-	#"todayilearned",
-	#"circlejerk",
-	#"magicskyfairy",
-	#"atheismrebooted",
+	"pics",
+	"funny",
+	"politics",
+	"gaming",
+	"askreddit",
+	"videos",
+	"iama",
+	"wtf",
+	"aww",
+	"atheism",
+	"AdviceAnimals",
+	"todayilearned",
+	"circlejerk",
+	"magicskyfairy",
+	"atheismrebooted",
 	"Braveryjerk",
 	"SOTBMeta",
 	#"test",
@@ -979,6 +981,10 @@ metaRule2Exemptions = [
 	hello_timmie,
 	Hello,
 	philosophyWithTim
+]
+
+metaRule2Whitelist = [
+	"SOTB-human"
 ]
 
 throttlingExemptions = [
@@ -1103,24 +1109,27 @@ def dumpDictionary(dictionary, fileName, format):
 
 
 def dumpMemory():
-	dumpDictionary(threadsWeveRepliedTo, "threads.txt", "list")
-	dumpDictionary(repliesWeveMade, "replies.txt", "list")
-	dumpDictionary(commentPlaceholders, "commentPlaceholders.txt", "string")
-	dumpDictionary(submissionPlaceholders, "submissionPlaceholders.txt", "string")
+	try:
+		dumpDictionary(threadsWeveRepliedTo, "threads.txt", "list")
+		dumpDictionary(repliesWeveMade, "replies.txt", "list")
+		dumpDictionary(commentPlaceholders, "commentPlaceholders.txt", "string")
+		dumpDictionary(submissionPlaceholders, "submissionPlaceholders.txt", "string")
 
-	file = open("feederPlaceholder.txt","w")
-	file.write(feederPlaceholder)
-	file.close()
+		file = open("feederPlaceholder.txt","w")
+		file.write(feederPlaceholder)
+		file.close()
 
-	file = open("feederHistory.txt","w")
-	file.write(string.join(feederThreadsWeveAnswered," "))
-	file.write("\n")
-	file.write(string.join(feederRepliesWeveMade," "))
-	file.write("\n")
-	file.write(string.join(usersWeveRepliedTo," "))
-	file.close()
+		file = open("feederHistory.txt","w")
+		file.write(string.join(feederThreadsWeveAnswered," "))
+		file.write("\n")
+		file.write(string.join(feederRepliesWeveMade," "))
+		file.write("\n")
+		file.write(string.join(usersWeveRepliedTo," "))
+		file.close()
 
-	print "Memory successfully dumped."
+		print "Memory successfully dumped."
+	except Exception, ex:
+		print "Error dumping memory:", ex
 
 
 def dumpThrottlingFactors():
@@ -1150,7 +1159,7 @@ def nameOfRule(ruleFunction):
 
 
 
-def makeComment(reply, ruleFunction): # Actually makes both comments and submissions.
+def makeComment(reply, ruleFunction, replyee): # Actually makes both comments and submissions.
 	if type(reply).__name__ == "function":
 		myReply = reply()
 	elif type(reply[1]).__name__ == "Submission":
@@ -1172,7 +1181,7 @@ def makeComment(reply, ruleFunction): # Actually makes both comments and submiss
 	n = nameOfRule(ruleFunction)
 	threadsWeveRepliedTo[n].append(thread)
 	repliesWeveMade[n].append(thread+"#"+myReply.id)
-
+	usersWeveRepliedTo.append(replyee)
 	print "Successfully commented!", myReply.permalink
 
 
@@ -1185,7 +1194,7 @@ def attemptComment(reply, ruleFunction, threadID, delaying=False):
 			replyee = str(reply[1].author)
 		else:
 			replyee = ""
-		if ruleFunction not in metaRule2Exemptions and (replyee == USERNAME or replyee in usersWeveRepliedTo):
+		if ruleFunction not in metaRule2Exemptions and (replyee == USERNAME or (replyee in usersWeveRepliedTo and replyee not in metaRule2Whitelist)):
 			print "Meta-Rule #2 of Bravery: Never reply to yourself or to people we've already replied to."
 		else:
 			if not delaying and delayedComments:
@@ -1194,7 +1203,7 @@ def attemptComment(reply, ruleFunction, threadID, delaying=False):
 				print "Comment has been queued because there are already comments waiting."
 			else:
 				try:
-					makeComment(reply, ruleFunction)
+					makeComment(reply, ruleFunction, replyee)
 				except Exception, ex:
 					if "you are doing that too much. try again in" in str(ex):
 						if delaying:
@@ -1404,52 +1413,57 @@ botConversations = loadBotConversations()
 
 # Before we start, update the throttlingFactors based on the karma totals,
 # not from the previous day, but from the day before that.
-"""
-INCREMENT = 0.8
 
-print "Updating throttling factors based on yesterday's karma."
-for ruleName in repliesWeveMade:
-	if ruleName in throttlingExemptions:
-		print ruleName, "is exempt from throttling."
-		continue
-	print "Assessing", ruleName
-	splitList = splitArrayByElement(repliesWeveMade[ruleName], "$")
-	if len(splitList) >=2:
-		yesterday = splitList[-2]
-	else:
-		yesterday = []
-	karma = 0
-	for ids in yesterday:
-		arr = ids.split("#")
-		threadID = arr[0]
-		commentID = arr[1]
-		url = "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+commentID
-		try:
-			commentTree = praw.objects.Submission.from_url(r, url).comments
-			if commentTree:
-				comment = commentTree[0]
-				score = int(comment.score)-1
-				print "A score of", str(score), "at", url
-				karma += score
-			else:
-				print "Comment has been deleted:", url
-		except Exception, ex:
-			print "Exception in getting comment. Assume 0.", ex
-		#print "Adding entry:", entry
-	print ruleName, "has gotten", str(karma), "karma."
-	if karma > 0:
-		throttlingFactors[ruleName] = min(1.0, throttlingFactors[ruleName]/INCREMENT)
-	elif karma < 0:
-		throttlingFactors[ruleName] = max(0.0, throttlingFactors[ruleName]*INCREMENT)
+if "noassess" not in sys.argv:
+	#"""
+	DOWN_INCREMENT = 0.5
+	UP_INCREMENT = 1.2
+	print "Updating throttling factors based on yesterday's karma."
+	for ruleName in repliesWeveMade:
+		if ruleName in throttlingExemptions:
+			print ruleName, "is exempt from throttling."
+			continue
+		if "!" in ruleName:
+			print ruleName, "is not a real rule."
+			continue
+		print "Assessing", ruleName
+		splitList = splitArrayByElement(repliesWeveMade[ruleName], "$")
+		if len(splitList) >=2:
+			yesterday = splitList[-2]
+		else:
+			yesterday = []
+		karma = 0
+		for ids in yesterday:
+			arr = ids.split("#")
+			threadID = arr[0]
+			commentID = arr[1]
+			url = "http://www.reddit.com/r/all/comments/"+threadID+"/_/"+commentID
+			try:
+				commentTree = praw.objects.Submission.from_url(r, url).comments
+				if commentTree:
+					comment = commentTree[0]
+					score = int(comment.score)-1
+					print "A score of", str(score), "at", url
+					karma += score
+				else:
+					print "Comment has been deleted:", url
+			except Exception, ex:
+				print "Exception in getting comment. Assume 0.", ex
+			#print "Adding entry:", entry
+		print ruleName, "has gotten", str(karma), "karma."
+		if karma > 0:
+			throttlingFactors[ruleName] = min(1.0, throttlingFactors[ruleName]*UP_INCREMENT)
+		elif karma < 0:
+			throttlingFactors[ruleName] = max(0.0, throttlingFactors[ruleName]*DOWN_INCREMENT)
 
-print "Done adjusting throttlingFactors."
-dumpThrottlingFactors()
+	print "Done adjusting throttlingFactors."
+	dumpThrottlingFactors()
 
-# Add "$" to the end of each repliesWeveMade list to mark the beginning of a new day.
-for ruleName in repliesWeveMade:
-	repliesWeveMade[ruleName].append("$")
-dumpMemory()
-#"""
+	# Add "$" to the end of each repliesWeveMade list to mark the beginning of a new day.
+	for ruleName in repliesWeveMade:
+		repliesWeveMade[ruleName].append("$")
+	dumpMemory()
+	#"""
 
 #Get ready...
 implementedCommentRules    = [(rule,implementRule(rule,True))  for rule in listOfCommentRules]
@@ -1515,9 +1529,9 @@ while True:
 
 	print "Checking for comments to delete."
 
-	while len(deletionQueue) > 12:
+	while len(deletionQueue) > 15:
 		myComment = deletionQueue.popleft()
-		if myComment.score < -1:
+		if myComment.score <= 0:
 			print "Deleting comment:", myComment.permalink
 			myComment.delete()
 			#lel, 2brave4u
