@@ -1194,7 +1194,7 @@ def attemptComment(reply, ruleFunction, threadID, delaying=False):
 			replyee = str(reply[1].author)
 		else:
 			replyee = ""
-		if ruleFunction not in metaRule2Exemptions and (replyee == USERNAME or (replyee in usersWeveRepliedTo and replyee not in metaRule2Whitelist)):
+		if replyee != "" and ruleFunction not in metaRule2Exemptions and (replyee == USERNAME or (replyee in usersWeveRepliedTo and replyee not in metaRule2Whitelist)):
 			print "Meta-Rule #2 of Bravery: Never reply to yourself or to people we've already replied to."
 		else:
 			if not delaying and delayedComments:
