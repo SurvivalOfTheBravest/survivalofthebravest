@@ -874,7 +874,7 @@ def leGem(submission, is_self, title, url, selftext):
 
 
 listOfCommentRules = { #Rules to apply to comments.
-	#notWTF:"notWTF",
+	notWTF:"notWTF",
 	oneTrueGod:"oneTrueGod",
 	sarahJessicaParker:"sarahJessicaParker",
 	murica:"murica",
@@ -992,6 +992,14 @@ throttlingExemptions = [
 	"freeButler",
 	"botAlert"
 ]
+
+DELETION_DELAY = 10*60 #In seconds.
+# After the specified delay, a comment must have AT LEAST this
+# much karma in order to escape deletion.
+DEFAULT_DELETION_THRESHOLD = 0
+deletionThresholds = {
+	"notWTF": 3
+}
 
 ###################### END CONFIGURATION LISTS #######################
 ######################################################################
@@ -1141,7 +1149,7 @@ def dumpThrottlingFactors():
 delayedComments = []
 nextDelayedComments = []
 
-deletionQueue = deque([])
+deletionQueue = []
 botAccusations = deque([])
 
 
@@ -1171,7 +1179,7 @@ def makeComment(reply, ruleFunction, replyee): # Actually makes both comments an
 
 	if type(myReply).__name__ == "Comment":
 		thread = myReply.submission.id
-		deletionQueue.append(myReply)
+		deletionQueue.append((myReply, time.time()))
 		#We will check this some number of comments later, and delete it if it gets too many downvotes.
 	elif type(myReply).__name__ == "Submission":
 		thread = myReply.id
@@ -1528,16 +1536,26 @@ while True:
 	print "Done applying rules."
 
 	print "Checking for comments to delete."
-
-	while len(deletionQueue) > 15:
-		myComment = deletionQueue.popleft()
-		if myComment.score <= 0:
-			print "Deleting comment:", myComment.permalink
-			myComment.delete()
-			#lel, 2brave4u
-			#myComment.edit(myComment.body + "\n\nEDIT: Downvotes? Seriously?")
-		else:
-			print "We won't delete that comment."
+	for thing in deletionQueue:
+		(myComment, timestamp) = thing
+		if time.time() - timestamp > DELETION_DELAY:
+			print "Assessing comment:", myComment.permalink
+			try:
+				refreshedComment = praw.objects.Submission.from_url(r, myComment.permalink).comments[0]
+				ruleName = ruleResponsibleForCommentWithID(myComment.id)
+				if ruleName in deletionThresholds:
+					threshold = deletionThresholds[ruleName]
+				else:
+					threshold = DEFAULT_DELETION_THRESHOLD
+				if refreshedComment.score < threshold:
+					print "Deleting comment."
+					myComment.delete()
+				else:
+					print "Comment is spared."
+			except:
+				print "Comment not found."
+			thing = None
+	deletionQueue = [x for x in deletionQueue if x]
 	print "Done deleting comments."
 
 	print "Sleeping..."
