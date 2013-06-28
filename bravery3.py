@@ -1536,8 +1536,8 @@ while True:
 	print "Done applying rules."
 
 	print "Checking for comments to delete."
-	for thing in deletionQueue:
-		(myComment, timestamp) = thing
+	newDeletionQueue = []
+	for (myComment, timestamp) in deletionQueue:
 		if time.time() - timestamp > DELETION_DELAY:
 			print "Assessing comment:", myComment.permalink
 			try:
@@ -1554,8 +1554,9 @@ while True:
 					print "Comment is spared."
 			except:
 				print "Comment not found."
-			thing = None
-	deletionQueue = [x for x in deletionQueue if x]
+		else:
+			newDeletionQueue.append((myComment, timestamp))
+	deletionQueue = newDeletionQueue
 	print "Done deleting comments."
 
 	print "Sleeping..."
