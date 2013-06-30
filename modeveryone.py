@@ -38,7 +38,7 @@ blacklist = []
 # Load data from disk before starting.
 file = open("placeholders.txt")
 lines = file.readlines()
-placeholder = lines[0]
+placeholder = lines[0][:-1]
 modlogPlaceholder = lines[1]
 file.close()
 
@@ -137,6 +137,7 @@ while True:
 					print "we've hit the limit."
 					queueing = True
 					startWait = time.time()
+					break
 				else:
 					print "we will stop till next time."
 					break
