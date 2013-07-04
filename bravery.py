@@ -667,7 +667,7 @@ def republicansAreEvil(comment, body):
 		if trigger in lc:
 			responses = [
 				"I hate Republicans. I loathe them. I hate people who support them. I hate people who even tolerate them. They are bringing America back to the dark ages with their hatred of all things non-white male.",
-				trigger + " is a plague on society. Sure he might be great if you are a rich, heterosexual, white male, but for the rest of us he is nothing but a cancer. True progressives need to unite against " + trigger + ".",
+				trigger + " is a plague on society. Sure they might be great if you are a rich, heterosexual, white male, but for the rest of us they are nothing but a cancer. True progressives need to unite against " + trigger + ".",
 				"Yet another ignorant tea bagger. I'd love to hear what " + trigger + " says about black people in private.",
 				"Just watch, they'll find a way to rig the election again in 2016 and some how " + trigger + " will win. There is no way they will allow a progressive to win again after all the damage Barack Obama has done to the white-centric patriarical plutocracy.",
 				"Righties and Republicans reading this, if you've gotten this far meybe you can figure out what made me this way. But don't ever look at someone like me and think we have no right for this feeling toward you. Don't ever think you or your heroes are innocent. ",
