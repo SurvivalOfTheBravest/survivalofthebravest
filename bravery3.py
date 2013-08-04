@@ -12,7 +12,7 @@ from password import PASSWORD
 
 
 USERNAME = "SEE_ME_EVERYWHERE"
-
+USERNAME2 = "WhateverItIs"
 
 ######################################################################
 ####################### BEGIN BRAVERY RULES. #########################
@@ -71,7 +71,7 @@ def murica(comment,body):
 # being in the wrong subreddit or to join in with them with your own top-level comment.
 # This rule brought to you by: /u/Carl_Bravery_Sagan
 def notWTF(comment,body):
-	if random.randint(0,8) != 1: return None
+	#if random.randint(0,8) != 1: return None
 	lowercaseComment = body.lower()
 	#Check if it contains any of the following:
 	triggercomments = [
@@ -94,7 +94,7 @@ def notWTF(comment,body):
 				"/r/im14andthisisWTF",
 				"OP is a faggot. Post in a relevant sub.",
 				"I don't think this is really WTF-worthy",
-				"Why is this is in /r/wtf?"
+				"Why is this in /r/wtf?"
 				#Again, I'm running out of comments
 			]
 			return(random.choice(topLevelResponses), comment.submission)
@@ -424,7 +424,7 @@ rBot = praw.Reddit(user_agent="Bravery bot 3.0 utility handler by /u/SOTB-bot")
 rBot.login(username="SOTB-bot", password=PASSWORD)
 
 
-orangeredMegathread = praw.objects.Submission.from_url(rBot, "http://www.reddit.com/r/SurvivalOfTheBravest/comments/1gwap5/orangered_megathread_2/")
+orangeredMegathread = praw.objects.Submission.from_url(rBot, "http://www.reddit.com/r/SurvivalOfTheBravest/comments/1hk7a5/orangered_megathread_3/")
 def orangeredViewer(comment, body):
 	ruleName = ruleResponsibleForCommentWithID(comment.parent_id[3:])
 	preface = "["+str(comment.author)+" responds to "+ruleName+"]("+comment.permalink+"?context=1):\n\n---\n\n"
@@ -547,6 +547,7 @@ def philosophyWithTim(comment, body):
 
 #This rule brought to you by: /u/bakedpatato
 def hodor(comment,body):
+	if str(comment.subreddit) == "books": return None
 	lc = body.lower()
 	#We don't need this, because we don't track those subreddits.
 	#subreddit = str(comment.subreddit)
@@ -686,7 +687,8 @@ def cumpants(comment, body):
 def notspacedicks(comment, body):
 	lc = body.lower()
 	if "r/spacedicks" in lc:
-		return("How about these: /r/spaceclop /r/gore /r/picsofdeadkids /r/nakedboyskissing /r/confusedboners /r/fetishitems /r/hentai /r/lolicon /r/yiff", comment)
+		weirdList = random.shuffle(["spaceclop","gore","picsofdeadkids","nakedboyskissing","confusedboners","fetishitems","hentai","lolicon","yiff","watchpeopledie","picsofdeadjailbait","clopclop","fapfap","toasterrights","sexwithdogs","sexwithdeaddogs"])
+		return("How about these: /r/"+string.join(weirdList[0:9], " /r/"), comment)
 	return None
 
 
@@ -813,7 +815,7 @@ def noWords(comment,body):
 
 # This rule brought to you by: /u/SOTB-human
 def religion(comment,body):
-	if "religion" in body.lower() and len(body) < 10 and comment.parent_id[:2]=="t1":
+	if "religion" in body.lower() and len(body) < 10 and comment.parent_id[:2]=="t3":
 		responses = [
 			"SO BRAVE",
 			"BRAVERY LEVEL: SO",
@@ -827,7 +829,22 @@ def religion(comment,body):
 
 
 
+# This rule brought to you by: /u/The_Jakebob
+def niggersRebooted(comment, body):
+	lc = body.lower()
+	if "nigger" in lc or " negro " in lc or "tarface" in lc or " coon " in lc or "apefreakin" in lc or "yard ape" in lc or "sub-human" in lc:
+		 if random.randint(0,1) != 1:
+			return ("/r/niggersrebooted", comment)
+	return None
 
+
+# This rule brought to you by: /u/SOTB-human
+def instructionsUnclear(comment, body):
+	lc = body.lower()
+	if "step 1" in lc and "step 2" in lc:
+		longestWord = max(re.findall(r"[\w']+|[.,!?;]", body),key=len)
+		return ("Instructions unclear, dick stuck in "+longestWord, comment)
+	return None
 
 
 
@@ -853,11 +870,46 @@ def levelLevel(submission, is_self, title, url, selftext):
 
 # This rule brought to you by: /u/SOTB-human
 def leGem(submission, is_self, title, url, selftext):
+	if str(submission.subreddit) == "WTF": return None
 	if re.search(r"\bgem\b", title.lower()): #find only whole-word occurrences of "gem"
-		return ("**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM****LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n\n\n\n**^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM**", submission)
+		return (random.choice([
+				"**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM****LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n**LE GEM****^LE ^GEM****^^LE ^^GEM****^^^LE ^^^GEM****^^^^LE ^^^^GEM****^^^^^LE ^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^^^LE ^^^^^^^GEM**\n\n\n\n**^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM****^^^^^^^LE ^^^^^^^GEM****^^^^^^LE ^^^^^^GEM****^^^^^LE ^^^^^GEM****^^^^LE ^^^^GEM****^^^LE ^^^GEM****^^LE ^^GEM****^LE ^GEM****LE GEM**",
+				"G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M \n\n              GEM                        GEM                        GEM\n\n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n\n                            GEM                        GEM\n\nG ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M \n\n              GEM                        GEM                        GEM\n\n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n\n                            GEM                        GEM\n\nG ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M  ^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M \n\n              GEM                        GEM                        GEM\n\n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M \n^^^^^^^^G ^^^^^^^E ^^^^^^M ^^^^^G ^^^^E ^^^M ^^G ^E M G ^E ^^M ^^^G ^^^^E ^^^^^M ^^^^^^G ^^^^^^^E ^^^^^^^^M ",
+				"                               .................                                \n                               ...?8~......O....                                \n                      ... ....,...O+?..=.=.$..8... ......                       \n                      ..+.O.8..$.........,...=:+.8..8~D...                      \n                      .=.8.,.......         ........ZO.ZO...                    \n             .......O...,.                           ..Z,:$=......              \n             ......Z=.. ..                           . ...+8..~...              \n             ...:.I.......                           ....... D....              \n           ....$.Z....    .....                              .D:I,..  .         \n        ...,..D,... ..  . .. .................. .....        .....~....         \n        ...~.+....   .   ..==::,:,,,,,,=....,~...:.,.        .....~8..          \n      ....,,..   ......:~=,,::,,,,,,,,=:=,..,,.~....,.,... ...  ..,.~..         \n    . ,.7.:..    ...~~::,,,,,~,,,,,,,,::::.......,.....~......    ..8.. .       \n    ...=?....    ..OOI?IIIIII????????++++?ZOOOOOZZIIIIIIIOOZ..    ...Z. .       \n     ..~O.. ......OZ7IIIIIII+????????+++++ZZZZZZZO7IIIIIIIOZO..........,,..     \n    ... ...  ...:ZOOIIIIIIII??????????++++ZOZZZZZZZIIIIIIIIOO7........,....     \n    ..ZD .. ...~ZO$IIIIIIII+?????????I++++ZOZZZZOZZ7IIIII7IIOZO. .. ...8?..     \n    ..8~.    ..+++=+++++++I++++++++++?+++++=++++++++~=======+~~+..    .$8..     \n    .I8..    ...=~~~~~~~~~~~:::::::::=::::,,,,,,,,,,.,,,,.,~..~..     ..8:.     \n    .8...    ....=~~:~~~~~~~:::::::::=:::~,,,,,,,,,,.,,,,.~.......     .,8.     \n    .8...      . .=~~~~~~~~~~::::::::~~::=,,,,,,,,.,,,,..~..:.         ..8.     \n    ,8...        ..:~~~~~~~~~::::::::::::~,,,,,,,~,,,,,,~.....        ...8$     \n    ZO...         ..~~~:~~~~~~:::::::::::,,,,,,,,.,,,.,~..            ...D8     \n    8?...        ....,~~~~~~~::::::::::::,,,,,,,:,,,,,~.:             ...Z8     \n    8~...        .    .~~~~~~~~::::::::::,,,,,,,,,,,.~.~,             ...I8     \n    O=..             ...~~~~~~~~~::::::::,,,,,,,,,,.=.~..             ...78     \n    8I...              ..=~~~~~::::::::::,,,,,~,,,,.....               ..O8     \n    ?8...            .....~:~~~~=::::::::,,,,,.,..:.......            ...88     \n    .D...                 .,~~:~~:::::~:=,,,,,,,,=...                 ...8~     \n    .D...                 ...~~~~~::::=:=,,,.,,,,,. .                  ..8.     \n    .8I..                 ....~~~:=:::=::,,,..:~~. ..                 ..OZ.     \n    ..8..                   ...~~:::::=:,,,=,..~                      ..8..     \n    ..88.                     ..~=~~::~:,,,,.,..                     ..8Z..     \n    ...8, .                    ..=~:~:::,,:.~...                      ~8...     \n    ....8....                 . ...=::::,=,,.                      ...8...      \n    ....Z8...                  ....,~=::,.:.                      ...8?....     \n    .. ..=8.,.        ....    .. ....=:~==..               ..     ..8O.....     \n        ..=8.....     ....     .......=+,...             .... . . ,O:..         \n        ...I8....   ........   ........:....    ..         ...  ..D~...         \n        .. ..8:.....Z88888OO.....88888888. ...O888........888....D.....         \n           ......O88OO:..:OD.....88DOOOOO,....888O.......DO88. ...              \n             ...D8D.............,88Z.. ... ..=88Z88.. ..D8O88O....              \n             ..888..............,888O8888....888.88I...7O8.~88....              \n             ..888........888,..,88$+???I.. .88~ .88,..88,..88~.                \n             ...D88.......888...~887..... ..$O8...I88.OO,...O8D...              \n             ....OOO8:....888...=887+===+...888....88888....888...              \n             .  ....?D88DOO?....+888O8888..+88......888.....888...              \n             ....  .. ................... .......... ............. "
+			]), submission)
 	return None
 
 
+# Restrict to /r/askreddit
+# This rule brought to you by: /u/SOTB-human
+def favoriteSubreddit(submission, is_self, title, url, selftext):
+	lt = title.lower()
+	if "your favorite subreddit" in lt or "your favourite subreddit" in lt:
+		responses = [
+			"I like /r/ModEveryone because they mod everyone that mentions its name.",
+			"/r/ModEveryone mods anyone who says its name.",
+			"My favorite's /r/ModEveryone. They mod you if you say its name!"
+		]
+		return (random.choice(responses), submission)
+	return None
+
+def modeveryonecj(submission, is_self, title, url, selftext):
+	return ("Damn it, first /r/atheism and now this. I'm fucking tired of getting pushed around by mods who think they're Hitler. I'm off to become a mod of /r/modeveryone. I hear they'll mod you just for saying its name! That'll show 'em.\n\nEdit: Holy shit, it worked!", submission)
+
+# This rule brought to you by: /u/Muzilos
+def canada(submission, is_self, title, url, selftext):
+	if random.randint(0,3) != 0: return None
+	lc = selftext.lower()
+	sorryList = ["As a Canadian I'd like to apologize for any inconvenience you suffered as a result of reading this apology. Again, dreadfully sorry.",
+		"As a Canadian, sorry",
+		"Relevant [comic](http://weknowmemes.com/wp-content/uploads/2012/01/canadian-stereotype-comics.jpg)",
+		"I'm so sick of the apologizing Canadian circlejerk. I've been to Canada tons of times, and the people there can be real jackasses sometimes."
+	]
+	if "[serious]" in title.lower() and str(submission.subreddit) == "askreddit":
+		return None
+	elif is_self and "sorry" and "canada" in lc and len(selftext) < 150:
+		return (random.choice(sorryList), submission)
+	else: return None
 
 
 
@@ -913,6 +965,8 @@ listOfCommentRules = { #Rules to apply to comments.
 	alot:"alot",
 	noWords:"noWords",
 	religion:"religion",
+	niggersRebooted:"niggersRebooted",
+	instructionsUnclear:"instructionsUnclear"
 }
 #listOfCommentRules = {
 #	orangeredViewer:"orangeredViewer"
@@ -921,29 +975,58 @@ listOfCommentRules = { #Rules to apply to comments.
 listOfSubmissionRules = { #Rules to apply to submissions.
 	levelLevel:"levelLevel",
 	leGem:"leGem",
+	favoriteSubreddit:"favoriteSubreddit",
+	canada:"canada",
+	modeveryonecj:"modeveryonecj"
 }
 
 
 # List of subreddits to check all rules in.
 trackingSubreddits = [
+	"pics",			#BANNED
+	"funny",		#BANNED
+	"politics",		#BANNED
+	"gaming",
+	"askreddit",	#BANNED
+	"videos",		#BANNED
+	"iama",
+	"wtf",
+	"aww",			#BANNED
+	"atheism",		#BANNED
+	"AdviceAnimals",#BANNED
+	"todayilearned",#BANNED
+	"circlejerk",
+	"magicskyfairy",
+	"atheismrebooted",#BANNED
+	"Braveryjerk",
+	"SOTBMeta",
+	"lounge",
+	"news",
+	"rage",
+	"cringe",
+	"cringepics",	#BANNED
+	"facepalm",
+	"books",
+	"earthporn",
+	"explainlikeimfive",
+	"gifs",
+	"television"
+	#"test",
+]
+
+#Will be managed by r2 instead:
+bannedSubreddits = [
 	"pics",
 	"funny",
 	"politics",
-	"gaming",
 	"askreddit",
 	"videos",
-	"iama",
-	"wtf",
 	"aww",
 	"atheism",
 	"AdviceAnimals",
 	"todayilearned",
-	"circlejerk",
-	"magicskyfairy",
 	"atheismrebooted",
-	"Braveryjerk",
-	"SOTBMeta",
-	#"test",
+	"cringepics",
 ]
 
 # These subreddits will not be checked by any rules EXCEPT those which explicitly
@@ -964,7 +1047,8 @@ subredditRestrictions = {
 	botConversationListener:["@ORANGERED"],
 	bjCopyPaste:["Braveryjerk"],
 	orangeredViewer:["@ORANGERED"],
-	botAlert:["@ORANGERED"]
+	botAlert:["@ORANGERED"],
+	modeveryonecj:["circlejerk"]
 }
 
 
@@ -998,7 +1082,7 @@ DELETION_DELAY = 10*60 #In seconds.
 # much karma in order to escape deletion.
 DEFAULT_DELETION_THRESHOLD = 0
 deletionThresholds = {
-	"notWTF": 3
+	"notWTF": 2
 }
 
 ###################### END CONFIGURATION LISTS #######################
@@ -1278,12 +1362,15 @@ def checkSubreddit(sr, isCommentTracker):
 			i = 0
 			for x in posts:
 				i+=1
-				if type(x).__name__ == "Comment":
+				if type(x).__name__ == "Comment" and str(x.author)!="SOTB-bot":
 					postsList.append(x)
 				if i>10 or x.id == ph:
 					break
 		else:
-			subreddit = r.get_subreddit(sr)
+			if sr in bannedSubreddits:
+				subreddit = r2.get_subreddit(sr)
+			else:
+				subreddit = r.get_subreddit(sr)
 			if isCommentTracker:
 				if sr == "askreddit":
 					lim = 800
@@ -1415,6 +1502,9 @@ def splitArrayByElement(array, splitter):
 
 r = praw.Reddit(user_agent="Bravery bot 3.0 by /u/"+USERNAME)
 r.login(username=USERNAME, password=PASSWORD)
+
+r2 = praw.Reddit(user_agent="Bravery bot 3.0 by /u/"+USERNAME2)
+r2.login(username=USERNAME2, password=PASSWORD)
 
 botConversations = loadBotConversations()
 
